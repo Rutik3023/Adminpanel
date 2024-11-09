@@ -1,0 +1,373 @@
+﻿@model  AdminPanel.Models.VMUserMaser
+
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                USER MASTER
+            </h4>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card rounded shadow-sm">
+                <div class="card-body">
+                    <form asp-action="Index" id="myform" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col" style="display:none">
+                                <ejs-textbox id="Id" placeholder="Id" ejs-for="@Model.UserID"></ejs-textbox>
+                            </div>
+                            <div class="col">
+                                <ejs-dropdownlist id="OrgCode" floatLabelType="Always" cssClass="e-outline e-small" placeholder="Organization" ejs-for="@Model.OrgCode" filterBarPlaceholder="Search" allowFiltering="true" filtering="onfilterings" dataSource="@ViewBag.ORG">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+                            <div class="col">
+
+                                <ejs-dropdownlist id="EmpCode" floatLabelType="Always" cssClass="e-outline e-small" placeholder="Employee *" ejs-for="@Model.EmpCode" filterBarPlaceholder="Search" allowFiltering="true" filtering="onfilteringsEmp" dataSource="@ViewBag.Emp">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+
+                            </div>
+                            <div class="col">
+                                <ejs-textbox id="UserName" floatLabelType="Always" cssClass="e-outline e-small" placeholder="User Name *" maxlength="50" ejs-for="@Model.UserName"></ejs-textbox>
+
+                            </div>
+                            <div class="col">
+                                <ejs-textbox id="Password" floatLabelType="Always" cssClass="e-outline e-small" placeholder=" Password *" maxlength="50" ejs-for="@Model.Password"></ejs-textbox>
+
+                            </div>
+
+
+                            <div class="col">
+                                <ejs-numerictextbox id="LoginAttempts" floatLabelType="Always" cssClass="e-outline e-small" min="1" max="3" maxlength="1" placeholder=" Login Attempts" format="###" ejs-for="@Model.LoginAttempts"></ejs-numerictextbox>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <ejs-numerictextbox id="MultipleDevice" floatLabelType="Always" cssClass="e-outline e-small" floatLabelType="Auto" format="###" min="3" max="10" placeholder="Multiple Device" ejs-for="@Model.MultipleDevice"></ejs-numerictextbox>
+
+                            </div>
+                            <div class="col">
+                                <ejs-dropdownlist id="SecurityQuestion" floatLabelType="Always" cssClass="e-outline e-small" placeholder="Security Question *" ejs-for="@Model.SecurityQuestion" filterBarPlaceholder="Search" allowFiltering="true" filtering="onfiltering" dataSource="@ViewBag.sq">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+                            <div class="col">
+                                <ejs-textbox name="SecurityAnswer" id="SecurityAnswer" floatLabelType="Always" cssClass="e-outline e-small" placeholder=" Security Answer *" ejs-for="@Model.SecurityAnswer"></ejs-textbox>
+                            </div>
+
+                            <div class="col">
+                                <ejs-dropdownlist id="Status" floatLabelType="Always" cssClass="e-outline e-small" placeholder="Status *" ejs-for="@Model.Status" filterBarPlaceholder="Search" dataSource="@ViewBag.Status">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+                            <div class="col">
+
+
+                                <ejs-checkbox name="IsADUser" id="IsADUser" floatLabelType="Auto" label="ADUser" ejs-for="@Model.IsADUser" cssClass="p-3"></ejs-checkbox>
+
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                <ejs-checkbox name="IsAdministrator" id="IsAdministrator" floatLabelType="Auto" label="Administrator" ejs-for="@Model.IsAdministrator" cssClass="p-3"></ejs-checkbox>
+
+                            </div>
+                            <div class="col-2">
+                                <ejs-checkbox id="IsAdmin" label="SAS/ORG" ejs-for="@Model.IsAdmin" cssClass="p-3"></ejs-checkbox>
+                            </div>
+
+
+                            <div class="col-3">
+                                <label for="Logo" class="w-50 text-secondary" style="font-size:13px">Add Image</label>
+                                <ejs-uploader id="Logo" name="Logo" style="flex: 1;" allowedExtensions=".jpg" multiple="false">
+                                </ejs-uploader>
+                            </div>
+
+                            @*   <div class="col-lg-3 col-md-6 col-sm-12">
+                            <ejs-textbox id="UserLoginType" floatLabelType="Auto" placeholder=" User Login Type" maxlength="10" ejs-for="@Model.UserLoginType"></ejs-textbox>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                            <ejs-textbox id="UserTypeCode" floatLabelType="Auto" placeholder=" User Type Code" maxlength="10" ejs-for="@Model.UserTypeCode"></ejs-textbox>
+                            </div> *@
+
+
+
+
+
+
+                            <div class="form-group p-2 text-end">
+
+                                @* <button type="submit" id="submitBtn" Class="e-btn bg-success text-light cust-btn">Submit</button> *@
+                                <ejs-button typeof="submit" cssClass="text-light cust-btn t-center" id="submitBtn" content="Submit"></ejs-button>
+                                <a asp-action="UserList" class="e-btn bg-light text-dark">Back</a>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@{
+    bool showPopup = TempData["ShowPopup"] != null && (bool)TempData["ShowPopup"];
+}
+@if (showPopup)
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var dialog = new ej.popups.Dialog({
+                header: 'ALERT',
+                content: '<div> Please upload a valid image file JPG or less than 3MB.</div>',
+                buttons: [
+                    { buttonModel: { content: 'OK', isPrimary: true }, click: onOkButtonClick, id: 'confirmOk' }
+                ]
+            });
+            dialog.appendTo('#dialog');
+            dialog.show(); // Show the dialog
+        });
+    </script>
+
+    <div id="dialog" class="w-25"></div> <!-- Placeholder for the dialog -->
+}
+
+
+
+<script>
+
+    function onOkButtonClick() {
+        // Close the dialog
+        this.hide();
+    }
+
+    function onFileUpload(args) {
+        // Maximum file size allowed: 3MB
+        var maxSize = 3 * 1024 * 1024; // 3MB in bytes
+
+        // Check the size of the uploaded file
+        if (args.fileData.size > maxSize) {
+            // Cancel the upload
+            args.cancel = true;
+            // Show an alert or add an error message
+            alert("File size exceeds 3MB. Please upload a file smaller than 3MB.");
+        }
+    }
+
+    $(document).ready(function () {
+        var optionsa = {
+            rules: {
+                'EmpCode': { required: [true, "Please Select EmpCode"] },
+                'UserName': { required: [true, "Please Enter User Name"], regex: [/^[A-Za-z ]+$/, "Please enter valid User Name"] },
+    @* 'Password': { required: [true, "Please Enter Password"] }, *@
+            'SecurityAnswer': { required: [true, "Please Enter Security Answer"] },
+        'SecurityQuestion': { required: [true, "Please Select Security Question"] },
+        'Status': { required: [true, "Please Select Status"] },
+        'MultipleDevice': { required: [true, "Please Enter MultipleDevice"] },
+        'LoginAttempts': { required: [true, "Please Enter LoginAttempts"] },
+
+
+        'Password': {
+            required: [true, "Please enter a new password"],
+                regex: [
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@@$!%*?&])[A-Za-z\d@@$!%*?&]{8,16}$/,
+                    'The password must meet the following criteria:<br>' +
+                    '1. Be at least 8 characters long and no more than 16 characters.<br>' +
+                    '2. Contain a mixture of both uppercase and lowercase letters.<br>' +
+                    '3. Include a combination of letters and numbers.<br>' +
+                    '4. Contain at least one special character (e.g., @@, $, !, %, *, ?, &).'
+                ]
+        }
+    }
+            };
+
+
+
+    var formObject = new ej.inputs.FormValidator('#myform');
+    formObject.rules = optionsa.rules;
+    formObject.customPlacement = function (inputElement, errorElement) {
+        var elementType = inputElement.tagName.toLowerCase();
+        var parentElement = inputElement.parentElement.parentElement;
+        if (elementType === "input" || elementType === "textarea" || elementType === "select") {
+            parentElement.appendChild(errorElement);
+        } else if (elementType === "ejs-numerictextbox" || elementType === "ejs-textbox" || elementType === "ejs-dropdownlist" || elementType === "ejs-datepicker") {
+            parentElement.parentElement.appendChild(errorElement);
+        }
+    }
+
+    var saveButton = document.getElementById('submitBtn');
+    saveButton.addEventListener('click', function (event) {
+        var IsValid = formObject.validate();
+        if (!IsValid) {
+            event.preventDefault();
+        }
+    });
+        });
+
+    function onfiltering(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.sq)), query);
+    }
+
+    function onfilterings(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.ORG)), query);
+    }
+
+    function onfilteringsEmp(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.Emp)), query);
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* <script>
+
+
+
+    var options = {
+        rules: {
+            'FullName': { required: [true, "Please enter Organization Name"] },
+            'UserLoginType': { required: [true, "Please enter Organization Code"] }
+
+
+        },
+        errorPlacement: function (error, element) {
+            var errorId = element.id + 'Error';
+            var errorSpan = document.getElementById(errorId);
+            if (errorSpan) {
+                errorSpan.textContent = error.textContent;
+            }
+        }
+
+    };
+
+
+
+    function validateCheckboxes(event) {
+        var isOceanChecked = document.getElementById("isOcean").checked;
+        var isLandChecked = document.getElementById("isLand").checked;
+        var isAirChecked = document.getElementById("isAir").checked;
+
+        if (!isOceanChecked && !isLandChecked && !isAirChecked) {
+            var errorMessages = document.getElementById('checkErr');
+            errorMessages.textContent = "Please select at least one option.";
+            // for (var i = 0; i < errorMessages.length; i++) {
+            //     errorMessages[i].textContent = "Please select at least one option.";
+            // }
+            event.preventDefault();
+        }
+    }
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get reference to the Syncfusion button element
+        var saveButton = document.getElementById('submitBtn');
+
+        // Add event listener for click event
+        saveButton.addEventListener('click', function (event) {
+            // Call your function when the button is clicked
+            AddUser(event);
+            //validateCheckboxes(event);
+        });
+    });
+
+    // Function to be called when the button is clicked
+    function AddUser(event) {
+
+        // Your logic here
+
+        // Defines FormValidator to validate the TextBox
+        console.log(options);
+        var formObject = new ej.inputs.FormValidator('#UserForm', options);
+
+        // Places error label outside the TextBox using the customPlacement event of FormValidator
+        formObject.customPlacement = function (element, errorElement) {
+            console.log(element.parentElement);
+            if (element.parentElement && element.parentElement.parentElement) {
+
+                element.parentElement.parentElement.appendChild(errorElement);
+            }
+        };
+
+        var IsValid = formObject.validate();
+        if (IsValid) {
+
+
+        } else {
+
+            event.preventDefault();
+
+        }
+
+        // Perform any other actions you need
+    }
+
+
+
+
+
+    function onfilteringa(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'startswith', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.State)), query);
+    }
+
+
+    function onfilteringb(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Name', 'startswith', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.city)), query);
+    }
+
+    function onfilteringc(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Name', 'startswith', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.country)), query);
+    }
+</script> *@

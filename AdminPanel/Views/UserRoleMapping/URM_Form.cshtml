@@ -1,0 +1,332 @@
+﻿@model  AdminPanel.Models.VMUrm_By_Id
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "URM_Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                User Role Mapping
+            </h4>
+        </div>
+    </div>
+</div>
+
+
+@* <div class="row p-3">
+    <div class="col-4">
+        <ejs-dropdownlist id="dropdown" placeholder="Select User" dataSource="@ViewBag.GetAllUser">
+            <e-dropdownlist-fields text="UserName" value="UserID"></e-dropdownlist-fields>
+        </ejs-dropdownlist>
+    </div>
+
+
+</div> *@
+
+
+<div id="Dilog" class="w-25">
+</div>
+
+<div class="container-fluid">
+    <div class="d-flex align-items-center justify-content-between row p-3">
+        <div class="col-4">
+            <form id="UrmForm">
+                <ejs-dropdownlist id="UserID" placeholder=" User" dataSource="@ViewBag.GetAllUserByid" ejs-for="@Model.UserID" change="onUserChange" filtering="onfilters" allowFiltering="true">
+                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </form>
+            <sapan id="Errdropdown"></sapan>
+        </div>
+
+        <div class="text-end col-4">
+            <!-- Aligns content to the right -->
+            <input type="button" id="submitButton" class="e-btn cust-btn text-light" value="Submit" />
+
+            <input type="reset" class="e-btn bg-danger text-light ml-2" value="Reset" onclick="resetForm()" />
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        @section ControlsSection {
+            <div class="control-section">
+                <ejs-grid id="Grid" dataSource="ViewBag.GetAllRole" allowSorting="true" allowPaging="true">
+                    <e-grid-selectionSettings persistSelection="true"></e-grid-selectionSettings>
+                    <e-grid-editSettings></e-grid-editSettings>
+                    <e-grid-pagesettings></e-grid-pagesettings>
+                    <e-grid-columns>
+                        @* <e-grid-column field="MENU_SRNO" headerText="SrNo" width="50"></e-grid-column> *@
+                        <e-grid-column field="Code" headerText="ID" isPrimaryKey="true" width="120" visible="false"></e-grid-column>
+                        <e-grid-column field="RoleName" headerText="Role Name" width="180"></e-grid-column>
+                        @* <e-grid-column field="IsAssigned" type="checkbox" headerText="isAssign" width="50"></e-grid-column> *@
+                        <e-grid-column field="IsAssigned" type="checkbox" headerTemplate="#headerTemplate" headerText="isAssign" width="50"></e-grid-column>
+
+                    </e-grid-columns>
+                </ejs-grid>
+                <script id="headerTemplate" type="text/x-template">
+                    <div class="e-gridheader">
+                    <input type="checkbox" id="checkAll" onclick="selectAllCheckboxes(this)" style="vertical-align: middle;margin-right: 10px;margin-left: 3px;">
+                    <label for="checkAll">Is Assign</label>
+                    </div>
+                </script>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        function selectAllCheckboxes(source) {
+            // Get the grid instance
+            var gridObj = document.getElementById('Grid').ej2_instances[0];
+
+            // Get all the checkbox elements in the grid
+            var checkboxes = gridObj.getContentTable().querySelectorAll('.e-rowcell .e-checkselect');
+
+            // Loop through each checkbox and set its checked state
+            checkboxes.forEach(function (checkbox) {
+                if (source.checked) {
+                    if (!checkbox.checked) {
+                        checkbox.click();  // Trigger click to select
+                    }
+                } else {
+                    if (checkbox.checked) {
+                        checkbox.click();  // Trigger click to deselect
+                    }
+                }
+            });
+        }
+    </script>
+
+
+
+    <!-- JavaScript to handle form submission -->
+    <script>
+
+
+        $(document).ready(function () {
+
+
+            var optionsa = {
+                rules: {
+                    'UserID': { required: [true, "Please select user"] }
+
+
+                }
+
+            }
+
+            var dialog = new ej.popups.Dialog({
+                header: 'Warning',
+                content: '<div>Please select atleast one role</div>',
+                buttons: [
+                    { buttonModel: { content: 'Ok', isPrimary: true }, click: clearDialogDiv }
+
+                ]
+
+            });
+
+
+            function clearDialogDiv() {
+
+                dialog.hide();
+
+                var dialogDiv = document.getElementById("Dilog");
+                if (dialogDiv) {
+                    while (dialogDiv.firstChild) {
+                        dialogDiv.removeChild(dialogDiv.firstChild);
+                    }
+                }
+            }
+
+
+            var formObject = new ej.inputs.FormValidator('#UrmForm');
+            console.log(formObject);
+            formObject.rules = optionsa.rules,
+                formObject.customPlacement = function (inputElement, errorElement) {
+                    // Check the type of the input element
+                    var elementType = inputElement.tagName.toLowerCase();
+
+                    var parentElement = inputElement.parentElement.parentElement;
+
+                    // For different types of elements, append error element accordingly
+                    if (elementType === "input" || elementType === "textarea" || elementType === "select") {
+                        parentElement.appendChild(errorElement);
+                    } else if (elementType === "ejs-numerictextbox" || elementType === "ejs-textbox" || elementType === "ejs-dropdownlist" || elementType === "ejs-datepicker") {
+                        // Assuming these are the custom elements
+                        parentElement.parentElement.appendChild(errorElement);
+                    }
+                }
+
+            var saveButton = document.getElementById('submitButton');
+            saveButton.addEventListener('click', function (event) {
+
+                console.log("Before Rules:" + optionsa)
+
+
+                var IsValid = formObject.validate();
+                if (IsValid) {
+                    console.log("after Rules:" + optionsa)
+                    var grid = document.getElementById('Grid').ej2_instances[0];
+                    var selectedRecords = grid.getSelectedRecords();
+                    var selectedData = JSON.stringify(selectedRecords);
+                    var selectedIDs = selectedRecords.map(record => record.Code);
+
+                    var dropdownObj = document.getElementById('UserID').ej2_instances[0];
+                    console.log(dropdownObj);
+                    var dropdownValue = dropdownObj.value;
+
+                    if (selectedRecords.length === 0) {
+
+                        event.preventDefault();
+
+
+
+                        dialog.appendTo('#Dilog');
+                        dialog.show();
+
+
+                        // Prevent form submission
+                    }
+                    else {
+                        var postData = {
+                            ID: selectedIDs,
+                            dropdownValue: dropdownValue
+                        };
+
+                        console.log(postData);
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', 'URM_Form', true);
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState == XMLHttpRequest.DONE) {
+                                var response = xhr.responseText;
+                                console.log("Response from server:", response);
+
+
+                                window.location.href = "/UserRoleMapping/URM_Form"
+
+                                // Update the content of the span with the response
+                                // var responseSpan = document.getElementById('responseSpan');
+                                // if (responseSpan) {
+                                //     responseSpan.innerHTML = response;
+                                // }
+
+
+                            }
+                        };
+                        xhr.send(JSON.stringify(postData));
+                    }
+
+
+                    console.log("Before Rules:" + optionsa)
+                } else {
+
+                    event.preventDefault();
+
+
+                }
+
+            });
+
+        });
+
+
+
+        function resetForm() {
+
+            // var dropdownObj = document.getElementById('dropdown');
+            // dropdownObj.value = ''; // Reset dropdown
+            // var grid = document.getElementById('Grid').ej2_instances[0];
+
+            window.location.href = "/Admin/UserRoleMapping/URM_Form"
+
+            // grid.clearSelection(); // Clear grid selection
+
+            var responseSpan = document.getElementById('responseSpan');
+            if (responseSpan) {
+                responseSpan.innerHTML = "";
+                EditandViewObj.checked = false;
+                isLockedObj.checked = false;
+            }
+
+
+        }
+
+
+
+        var dialog = new ej.popups.Dialog({
+            header: 'Warning',
+            content: '<div>Please select atleast one role</div>',
+            buttons: [
+                { buttonModel: { content: 'Yes', isPrimary: true } },
+
+            ]
+
+        });
+
+
+        function onfilters(e) {
+            var query = new ej.data.Query();
+            query = (e.text !== '') ? query.where('Text', 'startswith', e.text, true) : query;
+            e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.GetAllUserByid)), query);
+        }
+
+
+        function onUserChange(args) {
+
+
+
+
+            var userId = args.itemData.Value;
+
+            window.location.href = '@Url.Action("URM_Form", "UserRoleMapping")' + '?userid=' + userId;
+
+
+
+
+
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('GET', 'OnchangeEvenData?userId=' + userId, true);
+            // xhr.onreadystatechange = function () {
+            //     if (xhr.readyState == XMLHttpRequest.DONE) {
+            //         if (xhr.status === 200) {
+            //             var assignedRoles = JSON.parse(xhr.responseText); // Assuming assigned roles are returned as JSON
+            //             updateGridCheckboxes(assignedRoles);
+            //         } else {
+            //             console.error('Failed to fetch user roles. Status:', xhr.status);
+            //         }
+            //     }
+            // };
+            // xhr.send();
+        }
+
+        function updateGridCheckboxes() {
+            debugger;
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            var checkboxes = document.querySelectorAll('#roleCheckbox');
+
+            checkboxes.forEach(checkbox => {
+                var roleId = parseInt(checkbox.getAttribute('data-role-id'));
+                checkbox.checked = assignedRoles.some(role => role.Code === roleId);
+            });
+        }
+
+
+
+
+
+
+
+
+
+    </script>
+
+        }

@@ -1,0 +1,170 @@
+﻿@model AdminPanel.Models.Employee
+
+@using Newtonsoft.Json
+
+
+@{
+    var data = new string[] { "Trainee", "Temporary", "Probation", "Contractual Staff", "Confirmed" };
+
+}
+
+<div class="container-fluid">
+    <form id="Professional_Form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row ">
+
+            <div class="card rounded">
+                <div class="card-body">
+                    <div class="row">
+
+
+                        <p>General Details </p>
+
+
+
+                        <div class=" col-4">
+                            <ejs-datepicker id="Date_of_Joining" floatLabelType="Auto" placeholder="Date Of Joining" format="dd-MM-yyyy" ejs-for="@Model.Date_of_Joining"></ejs-datepicker>
+                            <span asp-validation-for="Date_of_Joining" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-datepicker id="Transfer_Date" placeholder="Transfer Date" floatLabelType="Auto" format="dd-MM-yyyy" ejs-for="@Model.Transfer_Date"></ejs-datepicker>
+
+                            <span asp-validation-for="Transfer_Date" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-datepicker id="Employment_End_Date" placeholder="Employment End Date" floatLabelType="Auto" format="dd-MM-yyyy" ejs-for="@Model.Employment_End_Date"></ejs-datepicker>
+
+                            <span asp-validation-for="Employment_End_Date" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-numerictextbox id="Probation_Period" maxlength="3" min="0" format="n2" value="0" placeholder="Probation Period" floatLabelType="Auto" Type="text" ejs-for="@Model.Probation_Period"></ejs-numerictextbox>
+
+                            <span asp-validation-for="Probation_Period" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-dropdownlist id="Professional_Status" floatLabelType=Auto placeholder="Status" filterBarPlaceholder="Search" ejs-for="@Model.Professional_Status" dataSource="data" >
+                                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                            </ejs-dropdownlist>
+                            <span asp-validation-for="Professional_Status" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textbox id="National_ID" maxlength="50" placeholder="National ID" floatLabelType="Auto" ejs-for="@Model.National_ID"></ejs-textbox>
+                            <span asp-validation-for="National_ID" class="text-danger"></span>
+                        </div>
+
+                        <br />
+                        <br />
+                        <br />
+
+                        <p>Employee Department </p>
+
+
+                        <div class=" col-4">
+                            <ejs-dropdownlist id="BranchCode" floatLabelType=Auto placeholder="Branch Location*" filterBarPlaceholder="Search" ejs-for="@Model.BranchCode" dataSource="@ViewBag.BranchLocation" filtering="onfilteringB" allowFiltering="true">
+                                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                            </ejs-dropdownlist>
+                            <span asp-validation-for="BranchCode" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-dropdownlist id="DepartmentCode" floatLabelType=Auto placeholder="Department*" filterBarPlaceholder="Search" ejs-for="@Model.DepartmentCode" dataSource="@ViewBag.Department" allowFiltering="true" filtering="onfilteringD" change="DeptHead">
+                                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                            </ejs-dropdownlist>
+                            <span asp-validation-for="DepartmentCode" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                           
+
+
+                            <ejs-dropdownlist id="Department_Head_Code" floatLabelType=Auto placeholder="Department Head*" readonly="true" filterBarPlaceholder="Search" ejs-for="@Model.Department_Head_Code" dataSource="@ViewBag.Department_Head" allowFiltering="true" filtering="onfilteringH" change="DeptHead">
+                                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                            </ejs-dropdownlist>
+
+
+                            <span asp-validation-for="Department_Head_Code" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-dropdownlist id="Reporting_To_Code" floatLabelType=Auto placeholder="Reporting To*" filterBarPlaceholder="Search" ejs-for="@Model.Reporting_To_Code" dataSource="@ViewBag.Reporting_To" allowFiltering="true" filtering="onfilteringR">
+                                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                            </ejs-dropdownlist>
+                            <span asp-validation-for="Reporting_To_Code" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <br />
+
+                        <br />
+                        <p>Employee Designation </p>
+
+
+                        <div class=" col-4">
+                            <ejs-datepicker id="Designation_Start_Date" floatLabelType="Auto" placeholder="Designation Start Date" format="dd-MM-yyyy" ejs-for="@Model.Designation_Start_Date"></ejs-datepicker>
+
+                            <span asp-validation-for="Designation_Start_Date" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-dropdownlist id="DesignationCode" floatLabelType=Auto placeholder="Designation*" filterBarPlaceholder="Search" ejs-for="@Model.DesignationCode" dataSource="@ViewBag.Designation" filtering="onfilteringDs" allowFiltering="true">
+                                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                            </ejs-dropdownlist>
+                            <span asp-validation-for="DesignationCode" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textbox id="Designation_Qualifier" maxlength="100" floatLabelType="Auto" placeholder="Designation Qualifier" ejs-for="@Model.Designation_Qualifier"></ejs-textbox>
+                            <span asp-validation-for="Designation_Qualifier" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textbox id="Job_Description" maxlength="2000" floatLabelType="Auto" placeholder="Job Description" ejs-for="@Model.Job_Description"></ejs-textbox>
+                            <span asp-validation-for="Job_Description" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textbox id="Payroll_Employee_ID" maxlength="50" floatLabelType="Auto" placeholder="Payroll Employee ID" ejs-for="@Model.Payroll_Employee_ID"></ejs-textbox>
+                            <span asp-validation-for="Payroll_Employee_ID" class="text-danger"></span>
+                        </div>
+                        @*   <div class="col-4 text-end">
+                        <ejs-button type="button" cssClass="text-light bg-danger" id="TabsSubmitBtn" content="Save" onclick="SaveData()"></ejs-button>
+
+                        <!-- <a asp-action="OrganizationList" class="e-btn bg-light text-dark">Back</a> -->
+                        </div> *@
+                        <br />
+
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+    </form>
+</div>
+
+
+<script>
+
+    function onfilteringB(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.BranchLocation)), query);
+    }
+
+    function onfilteringD(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.Department)), query);
+    }
+
+     function onfilteringH(e) {
+     var query = new ej.data.Query();
+     query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.Department_Head)), query);
+ }
+
+    function onfilteringR(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.Reporting_To)), query);
+    }
+
+    function onfilteringDs(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.Designation)), query);
+    }
+</script>
+

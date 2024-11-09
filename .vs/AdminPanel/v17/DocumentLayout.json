@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\opdandadmin\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|d:\\opdandadmin\\adminpanel\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|solutionrelative:adminpanel\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|d:\\opdandadmin\\adminpanel\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|solutionrelative:adminpanel\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|d:\\opdandadmin\\adminpanel\\commonrepo\\commonfunction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|solutionrelative:adminpanel\\commonrepo\\commonfunction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|d:\\opdandadmin\\adminpanel\\controllers\\employeemastercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|solutionrelative:adminpanel\\controllers\\employeemastercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|d:\\opdandadmin\\adminpanel\\controllers\\organizationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|solutionrelative:adminpanel\\controllers\\organizationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|d:\\opdandadmin\\adminpanel\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1A7A75E-0927-49CF-920D-E2729E0F9026}|AdminPanel\\AdminPanel.csproj|solutionrelative:adminpanel\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "D:\\opdandadmin\\AdminPanel\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "AdminPanel\\Controllers\\LoginController.cs",
+              "ToolTip": "D:\\opdandadmin\\AdminPanel\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "AdminPanel\\Controllers\\LoginController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-09T09:25:57.88Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CommonFunction.cs",
+              "DocumentMoniker": "D:\\opdandadmin\\AdminPanel\\CommonRepo\\CommonFunction.cs",
+              "RelativeDocumentMoniker": "AdminPanel\\CommonRepo\\CommonFunction.cs",
+              "ToolTip": "D:\\opdandadmin\\AdminPanel\\CommonRepo\\CommonFunction.cs",
+              "RelativeToolTip": "AdminPanel\\CommonRepo\\CommonFunction.cs",
+              "ViewState": "AQIAABEAAAAAAAAAAAAAwB8AAACUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-09T09:22:12.822Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\opdandadmin\\AdminPanel\\appsettings.json",
+              "RelativeDocumentMoniker": "AdminPanel\\appsettings.json",
+              "ToolTip": "D:\\opdandadmin\\AdminPanel\\appsettings.json",
+              "RelativeToolTip": "AdminPanel\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAABnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-11-09T08:24:04.969Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "EmployeeMasterController.cs",
+              "DocumentMoniker": "D:\\opdandadmin\\AdminPanel\\Controllers\\EmployeeMasterController.cs",
+              "RelativeDocumentMoniker": "AdminPanel\\Controllers\\EmployeeMasterController.cs",
+              "ToolTip": "D:\\opdandadmin\\AdminPanel\\Controllers\\EmployeeMasterController.cs",
+              "RelativeToolTip": "AdminPanel\\Controllers\\EmployeeMasterController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAALAAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-09T07:14:57.677Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "OrganizationController.cs",
+              "DocumentMoniker": "D:\\opdandadmin\\AdminPanel\\Controllers\\OrganizationController.cs",
+              "RelativeDocumentMoniker": "AdminPanel\\Controllers\\OrganizationController.cs",
+              "ToolTip": "D:\\opdandadmin\\AdminPanel\\Controllers\\OrganizationController.cs",
+              "RelativeToolTip": "AdminPanel\\Controllers\\OrganizationController.cs",
+              "ViewState": "AQIAAIAAAAAAAAAAAAAgwEEAAAA7AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-09T07:12:22.882Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\opdandadmin\\AdminPanel\\Program.cs",
+              "RelativeDocumentMoniker": "AdminPanel\\Program.cs",
+              "ToolTip": "D:\\opdandadmin\\AdminPanel\\Program.cs",
+              "RelativeToolTip": "AdminPanel\\Program.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAcwBgAAABCAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-09T06:06:18.68Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

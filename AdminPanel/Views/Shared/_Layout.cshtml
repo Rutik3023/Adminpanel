@@ -1,0 +1,753 @@
+﻿@using Syncfusion.EJ2
+@using Newtonsoft.Json
+
+@{
+    var items = new[]
+     {
+        new { Id = 1, Name = "MBL No" },
+        new { Id = 2, Name = "HBL No" },
+        new { Id = 3, Name = "Booking No" },
+        new { Id = 4, Name = "Container No" }
+    };
+
+    var jsonData = Newtonsoft.Json.JsonConvert.SerializeObject(items);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] -  AdminPanel</title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    @*     <link href="~/css/material_25_1_35.css" rel="stylesheet" /> *@
+
+    <link href="" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.syncfusion.com/ej2/26.1.35/material.css" rel="stylesheet">
+
+
+    <link href="~/css/style.css" rel="stylesheet" />
+
+    <link href="~/css/layout_css.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <link href="~/css/boxicons.min.css" rel="stylesheet" />
+
+    <link href="~/css/theme.css" rel="stylesheet" />
+
+    <script src="~/js/bootstrapsidebar.bundle.min.js"></script>
+
+
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/layout_js.js"></script>
+
+
+
+    <script src="~/js/jquery-3.7.1.min.js"></script>
+
+    @*  <script src="~/js/ej2_25_1_35.min.js"></script> *@
+
+    <script src="https://cdn.syncfusion.com/ej2/26.1.35/dist/ej2.min.js"></script>
+
+
+
+    <style>
+
+        .dropdown-menu[data-bs-popper] {
+            top: 100%;
+            left: -74px;
+            margin-top: var(--bs-dropdown-spacer);
+        }
+
+        .sidebar li .submenu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .sidebar a {
+            color: white
+        }
+
+        #mainNav a {
+            color: black;
+        }
+
+        h5 {
+            color: black !important;
+        }
+
+        #mysidebar button a {
+            color: rgb(41 145 147 / 82%) !important;
+            font-weight: bold;
+        }
+
+        body {
+            overflow-y: scroll;
+            / This will add a vertical scrollbar to the body /
+        }
+    </style>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: #f0f0f0;
+            / Optional: background color for better visibility /
+        }
+
+        .loader-overlay {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+        }
+
+        .loader {
+            width: 50px;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: radial-gradient(farthest-side, #ffa516 94%, #0000) top/8px 8px no-repeat, conic-gradient(#0000 30%, #ffa516);
+            -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+            animation: l13 1s infinite linear;
+        }
+
+        @@keyframes l13 {
+            100% {
+                transform: rotate(1turn);
+            }
+        }
+
+        #SessionTimeOut_dialog-content {
+            min-height: 39px;
+            font-size: 14px;
+        }
+    </style>
+
+    <style>
+        .dropdown-menu {
+            padding: 0;
+            margin-top: 10px; /* Adjusts dropdown spacing */
+            border-radius: 4px;
+        }
+
+        .dropdown-item {
+            padding: 10px 20px; /* Adjust the padding for better appearance */
+        }
+    </style>
+
+
+    @* Code for serach master with its numeber starts -:Moin Mulla *@
+
+
+
+    <script>
+        // let isNavigatingAway = false;
+
+        // // Function to handle navigation events
+        // function setNavigating(flag) {
+        //     isNavigatingAway = flag;
+        // }
+
+        // // Add event listeners to links and buttons
+        // document.querySelectorAll('a, button').forEach((element) => {
+        //     element.addEventListener('click', () => setNavigating(true));
+        // });
+
+        // // beforeunload event listener
+        // window.addEventListener('beforeunload', (event) => {
+        //     if (isNavigatingAway) {
+        //         // Optionally do something specific for link/button clicks
+        //         console.log('Navigating away via a link or button click');
+        //     } else {
+        //         // Handle other types of page unloads if needed
+        //         console.log('Page is being closed or navigated away');
+        //     }
+
+        //     event.preventDefault();
+        //     event.returnValue = ''; // Show confirmation dialog
+        // });
+
+        // // Reset flag on page load
+        // window.addEventListener('load', () => {
+        //     isNavigatingAway = false; // Reset flag when the page is loaded
+        // });
+
+        // let isNavigatingAway = false;
+
+        // // Set the flag when a user interacts with a link or button
+        // document.querySelectorAll('a, button').forEach(element => {
+        //     element.addEventListener('click', () => {
+        //         isNavigatingAway = true;
+        //     });
+        // });
+
+        // // Listen for the beforeunload event
+        // window.addEventListener('beforeunload', (event) => {
+        //     if (!isNavigatingAway) {
+        //         console.log(isNavigatingAway);
+        //         event.preventDefault();
+        //         event.returnValue = '';
+        //     }
+        // });
+
+
+    </script>
+    <script>
+
+        // window.addEventListener('beforeunload', function (event) {
+        //     alert("jjjj")
+        //     // navigator.sendBeacon('/YourController/YourAction', JSON.stringify({ /* Any data you want to send */ }));
+        //         navigator.sendBeacon('@Url.Action("Logout", "Login")');
+        //     });
+
+
+
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+
+
+
+
+
+            var dialogForSearch = new ej.popups.Dialog({
+                header: '<div class="text-danger">Alert Message</div>',
+                content: '<div>Please Enter valid Number</div>',
+                visible: false,
+                buttons: [{
+
+                    buttonModel: { content: 'Ok', isPrimary: true }, click: onOkClickSearch
+                }]
+            });
+
+            function cleardialogalertSerach() {
+
+                // alert("clear");
+                var dialogDiv = document.getElementById("SessionTimeOut");
+                if (dialogDiv) {
+                    while (dialogDiv.firstChild) {
+                        dialogDiv.removeChild(dialogDiv.firstChild);
+                    }
+                }
+            }
+
+            function onOkClickSearch() {
+                cleardialogalertSerach();
+
+                dialogForSearch.hide();
+            }
+
+
+
+
+            document.getElementById("btnSearchFrm").addEventListener("click", function () {
+                var SearchMaster = document.getElementById("SearchForm").ej2_instances[0].value;
+                var Code = document.getElementById("SearchNo").ej2_instances[0].value;
+                console.log(SearchMaster + " SearchMaster " + Code)
+
+                if (SearchMaster != null && Code != null) {
+                    $.ajax({
+                        url: "@Url.Action("Check_valid_data", "Common")", // Corrected here
+                        data: { MasterNo: Code, Mastername: SearchMaster },
+                        dataType: 'json',
+                        success: function (data) {
+                            // Handle successful response here
+                            console.log(data);
+                            if (data == true && SearchMaster != "3") {
+                                window.location.href = "@Url.Action("Form", "SeaImportJob")" + '?Code=' + Code + '&type=' + SearchMaster;
+                            }
+                            else if (data == true && SearchMaster == "3") {
+
+                                window.location.href = "@Url.Action("Form", "Booking")" + '?id=' + 0 + '&NominationNo=' + Code;
+                            }
+                            else {
+                                dialogForSearch.appendTo('#SessionTimeOut');
+                                dialogForSearch.show();
+
+                            }
+                            //
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
+                    });
+                }
+
+            });
+
+        });
+
+        // function onCreateIcon() {
+        //     var textboxObj = document.getElementById("SearchNo");
+        //     textboxObj.ej2_instances[0].addIcon("append", "fas fa-search");
+        // }
+
+
+
+
+
+        // Registering Syncfusion license key
+        ej.base.registerLicense('Ngo9BigBOggjHTQxAR8/V1NCaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXlfeXRUQmRcUU1yWEs=');
+    </script>
+    @* Code for serach master with its numeber Ends *@
+
+
+</head>
+
+<body>
+
+    @*
+    @  @await Html.PartialAsync("SideBar_PartialView") @ *@
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader"></div>
+    </div>
+    @await Html.PartialAsync("SideBar_PartialView")
+
+    <section class="home-section">
+
+        @*   Nav Bar *@
+
+        <div class="home-content shadow-sm p-1 bg-body rounded">
+            <!-- Welcome text could go here if needed -->
+            <div class="col-4">
+                <img id="orgLogo" src="" class="img-fluid" alt="Logo" data-toggle="modal" data-target="#editLogoModal" style="cursor: pointer;" />
+                @* <img id="orgLogo" src="" alt="LOGO" width="30px" height="30px" /> *@
+            </div>
+
+            <div class="col">
+
+                @* <img id="orgLogo" src="" alt="LOGO" width="30px" height="30px" /> *@
+            </div>
+            <div class="col">
+                <ejs-dropdownlist id="SearchForm" floatLabelType="Always" placeholder="Search Master " cssClass="e-outline e-small" filterBarPlaceholder="Search" dataSource="@jsonData">
+                    <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+                @* <img id="orgLogo" src="" alt="LOGO" width="30px" height="30px" /> *@
+            </div>
+
+            <div class="col ps-3">
+
+                <ejs-textbox id="SearchNo" placeholder="No" cssClass="e-outline e-small" floatLabelType=Always></ejs-textbox>
+
+                @* <img id="orgLogo" src="" alt="LOGO" width="30px" height="30px" /> *@
+            </div>
+            <div class="col pb-2 ps-2">
+
+                <ejs-button id="btnSearchFrm" iconCss="e-icons e-search"></ejs-button>
+            </div>
+
+            <!-- Other content can go here -->
+            @* <div class="col-6">
+            </div> *@
+            @using System.Security.Claims
+            @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+            @{
+                var user = HttpContextAccessor.HttpContext.User as ClaimsPrincipal;
+                var userName = user?.FindFirst(ClaimTypes.Name)?.Value;
+                var orgCode = user?.FindFirst("OrgCode")?.Value;
+                var isChecker = user?.FindFirst("isChecker")?.Value;
+                ViewBag.user = userName;
+                var Orgname = user?.FindFirst("OrgName")?.Value;
+                var Email = user?.FindFirst("Email")?.Value;
+
+            }
+
+
+            @*  <div class="col-3 text-end ">
+            <!-- Dropdown container -->
+            <div class="dropdown">
+            <!-- Username button with proper width -->
+            <button class="btn btn-light dropdown-toggle w-50" type="button" id="userNameDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            @userName
+            </button>
+
+            <!-- Dropdown menu with adjusted width to match the button -->
+            <ul class="dropdown-menu w-50" aria-labelledby="userNameDropdown">
+            <li>
+            <!-- Logout button inside the dropdown -->
+            <ejs-button type="button" cssClass="dropdown-item text-danger bg-light" id="LogoutBTN" content="Logout"></ejs-button>
+            </li>
+            </ul>
+            </div>
+            </div>
+
+            *@
+
+            <div class="col text-end">
+                <!-- Dropdown container -->
+                <div class="dropdown">
+                    <!-- Username button with proper width -->
+                    <button class="btn btn-light dropdown-toggle" type="button" id="userNameDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        @userName
+                    </button>
+                    <!-- Dropdown menu with adjusted width to match the button -->
+                    <ul class="dropdown-menu cust-dropdown" aria-labelledby="userNameDropdown">
+                        <li class="dropdown-header">
+                            <div class="row">
+                                <div class="col-3">
+                                    <!-- Profile image -->
+                                    <div class="p-1 mt-3">
+                                        <svg width="50" height="50" class="rounded-circle position-absolute start-0 ms-3" style="opacity: 0.7;">
+                                            <rect width="100%" height="100%" fill="#007bff" rx="20" />
+                                            <text x="50%" y="50%" fill="white" font-size="18" text-anchor="middle" alignment-baseline="top" dy=".3em"> @ViewBag.user[0]</text>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <strong class="mt-4">@userName</strong><br>
+                                    <span>@Orgname</span><br>
+                                    <small>@Email</small><br />
+                                    <!-- Logout button inside the dropdown -->
+                                    <ejs-button type="button" cssClass="text-danger  e-flat p-0 mt-2" id="LogoutBTN" content="Logout"></ejs-button>
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+
+
+
+
+            @*   <b>@userName</b>
+            <ejs-button type="button" cssClass="text-dark bg-light" id="LogoutBTN" content="Logout"></ejs-button> *@
+
+
+            @*  </div> *@
+        </div>
+
+
+        </div>
+        <div id="SessionTimeOut" class="w-25 "></div>
+
+        @*     Render Body Here *@
+
+        <div>
+            @RenderSection("Scripts", required: false)
+            @RenderBody()
+            @RenderSection("ControlsSection", false)
+
+        </div>
+    </section>
+
+
+
+
+
+
+    <script src="~/js/script.js"></script>
+
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <ejs-scripts></ejs-scripts>
+
+
+
+    @RenderSection("Scripts", required: false)
+    @RenderSection("PreScripts", required: false)
+
+
+
+    <script>
+
+
+        $(document).ready(function () {
+
+            $('#loaderOverlay').hide();
+
+
+        })
+    </script>
+
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            // Define the base URL for your application
+            var baseUrl = '@Url.Content("~/")';
+
+            $.ajax({
+                url: '@Url.Action("Index", "DynamicSidebar")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+
+                    var getMenuItem = function (itemData) {
+
+                        var hasChildren = itemData.children && itemData.children.length > 0;
+
+                        var menuIconHtml;
+
+                        if (itemData.menuIcon != null) {
+
+                            menuIconHtml = itemData.menuIcon.replace(/"/g, "'");
+                        }
+                        else {
+                            menuIconHtml = "<i class='bi bi-play-fill'></i>";
+                        }
+                        var item = $("<li>")
+                            .append(
+                                $("<div>", { "class": "iocn-link" })
+                                    .append(
+                                        $("<a>", {
+                                            class: "btn-link-left",
+                                            href: itemData.menuUrl === "#" ? "javascript:void(0)" : baseUrl + itemData.menuUrl,
+
+
+                                            //href: "javascript:void(0)",
+
+
+
+                                            html: menuIconHtml + "<span class='link_name'>" + itemData.menuName + "</span>"
+                                        })
+                                    )
+                                    .append(hasChildren ? $("<i>", { "class": "bx bxs-chevron-down arrow" }) : "")
+                            );
+
+
+
+
+                        if (hasChildren) {
+                            var subList = $("<ul>", { "class": "sub-menu" });
+                            $.each(itemData.children, function () {
+                                subList.append(getMenuItem(this));
+                            });
+                            item.append(subList);
+                        }
+
+                        return item;
+                    };
+
+
+
+
+
+                    var $menu = $("#menu");
+                    $.each(data, function () {
+                        $menu.append(getMenuItem(this));
+                    });
+
+                    // Enable toggle functionality
+                    $(".iocn-link").click(function () {
+                        $(this).next(".sub-menu").slideToggle();
+                        $(this).toggleClass("bx-rotate");
+                    });
+
+                    // Optionally, you can add any additional initialization needed for your menu
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error loading menu data: ", error);
+                }
+            });
+
+
+
+        });
+
+        $(document).ready(function () {
+            $.ajax({
+                url: ' @Url.Action("ORGLOGO", "DynamicSidebar")',
+                type: 'GET',
+                success: function (response) {
+                    if (response.logo) {
+                        // alert("ok");
+                        var imgSrc = 'data:image/png;base64,' + response.logo;
+                        $('#orgLogo').attr('src', imgSrc);
+                    } else {
+                        console.log("No logo available");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching logo:", error);
+                }
+            });
+        });
+    </script>
+
+
+
+    @* //Logout *@
+    <script type="text/javascript">
+        document.getElementById('LogoutBTN').addEventListener('click', function () {
+            window.location.href = '/Login/Logout';
+        });
+    </script>
+
+
+    <script>
+        document.querySelectorAll('.iocn-link').forEach(link => {
+            link.addEventListener('click', function () {
+                // Toggle the 'active' class on the clicked link
+                this.classList.toggle('active');
+
+                // Find the corresponding sub-menu and toggle its display
+                let subMenu = this.nextElementSibling;
+                if (subMenu && subMenu.classList.contains('sub-menu')) {
+                    if (subMenu.style.display === 'block') {
+                        subMenu.style.display = 'none';
+                    } else {
+                        subMenu.style.display = 'block';
+                    }
+                }
+            });
+        });
+    </script>
+
+
+    @*  @ Operation for Maintaining session for 15 minutes if user is ideal @ *@
+    <script>
+
+
+
+
+        var dialogForSessionTimeOut = new ej.popups.Dialog({
+            header: '<div class="text-danger">Alert Message</div>',
+            content: '<div>Your session will expire in <span style="color:red;">1 </span>minute due to inactivity.</div>',
+            visible: false,
+            buttons: [{
+
+                buttonModel: { content: 'Ok', isPrimary: true }, click: onOkClickToSession
+            }]
+        });
+
+
+
+        function onOkClickToSession() {
+
+
+            dialogForSessionTimeOut.hide();
+        }
+
+
+
+
+    </script>
+    <script>
+
+        function cleardialogalertSession() {
+
+            // alert("clear");
+            var dialogDiv = document.getElementById("SessionTimeOut");
+            if (dialogDiv) {
+                while (dialogDiv.firstChild) {
+                    dialogDiv.removeChild(dialogDiv.firstChild);
+                }
+            }
+        }
+
+
+
+
+
+        // Idle timeout value in milliseconds (60 seconds)
+        // var idleTimeout = 20 * 1000; //60 seconds;
+        var idleTimeout = 15 * 60 * 1000; // 15 minutes
+
+        // Warning timeout value in milliseconds (10 seconds before expiration)
+        // var warningTimeout = idleTimeout - 10 * 1000; // 50 seconds
+        var warningTimeout = idleTimeout - 60 * 1000; // 14 minutes
+
+
+
+        var idleTimer;
+        var warningTimer;
+        var warningShown = false;
+
+        function resetTimer() {
+            // console.log("User activity detected. Resetting timer.");
+            clearTimeout(idleTimer);
+            clearTimeout(warningTimer);
+
+            // Reset the idle timer
+            idleTimer = setTimeout(sessionExpired, idleTimeout);
+
+            // Set the warning timer
+            warningTimer = setTimeout(showWarning, warningTimeout);
+
+            // Reset the warning flag
+            warningShown = false;
+        }
+
+        function showWarning() {
+            if (!warningShown) {
+                // console.log("Warning: Your session will expire in 10 seconds.");
+
+                cleardialogalertSession();
+                dialogForSessionTimeOut.appendTo('#SessionTimeOut');
+
+                dialogForSessionTimeOut.show();
+                // alert("Your session will expire in 10 seconds due to inactivity.");
+                warningShown = true;
+            }
+        }
+
+        function sessionExpired() {
+            console.log("Session expired. Redirecting to login page.");
+            // Notify the server about session expiration, if needed
+            // For example, you can make an AJAX call to log the user out
+
+            // Redirect to login page
+            window.location.href = '/General/Login/Logout';
+        }
+
+        // Reset the timer on any user interaction
+        window.onload = function () {
+            console.log("Page loaded. Starting idle timer.");
+            resetTimer();
+        };
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+        document.ontouchstart = resetTimer; // for mobile devices
+        document.onclick = resetTimer; // for mouse clicks
+
+        // Set the initial timer
+        resetTimer();
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Select all Syncfusion labels
+            $('label').each(function () {
+                // Get the current label text
+                var labelText = $(this).text();
+
+                // Check if the label text contains an asterisk
+                if (labelText.includes('*')) {
+                    // Replace the asterisk with a span to style it
+                    var updatedText = labelText.replace('*', '<span style="color: red;">*</span>');
+                    $(this).html(updatedText); // Set the updated HTML back to the label
+                }
+            });
+        });
+    </script>
+
+
+</body>
+
+

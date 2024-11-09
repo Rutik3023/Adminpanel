@@ -1,0 +1,411 @@
+﻿@model  AdminPanel.Models.VMGet_Menu_ByRoleID
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "RMM_Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    .checkbox-custom {
+        height: 16px;
+        width: 50px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                Role Menu Mapping
+            </h4>
+        </div>
+    </div>
+</div>
+<div id="Dilog" class="w-25"></div>
+<div class="container-fluid">
+    <div class="d-flex align-items-center justify-content-between row p-3">
+
+        <div class="col-4">
+            <form id="RoleForm">
+                <ejs-dropdownlist id="Code" placeholder="Roles" dataSource="@ViewBag.Roles" change="onUserChange" ejs-for="@Model.Code" filtering="onfilters" allowFiltering="true">
+                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </form>
+        </div>
+        <div class="text-end col-4">
+            <!-- Aligns content to the right -->
+            <input type="button" id="submitButton" class="e-btn cust-btn text-light" value="Submit" />
+            <input type="reset" class="e-btn bg-danger text-light ml-2" value="Reset" onclick="resetForm()" />
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    @section ControlsSection {
+        <div class="control-section">
+            <ejs-grid id="Grid" dataSource="@ViewBag.GetAllMenu" allowSorting="true" allowSelection="true" allowPaging="true" created="onGridCreated" queryCellInfo="onQueryCellInfo">
+                <e-grid-selectionSettings persistSelection="true"></e-grid-selectionSettings>
+                <e-grid-editSettings allowDeleting="true"></e-grid-editSettings>
+                <e-grid-pagesettings></e-grid-pagesettings>
+                <e-grid-columns>
+                    <e-grid-column field="Code" headerText="Code" isPrimaryKey="true" width="120" visible="false"></e-grid-column>
+                    <e-grid-column field="MenuName" headerText="Menu Name" width="180"></e-grid-column>
+                    <e-grid-column field="IsAssigned" headerText="IsAssigned" width="100"></e-grid-column>
+                    <e-grid-column field="IsEditView" headerText="IsEditView" width="100"></e-grid-column>
+                </e-grid-columns>
+            </ejs-grid>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        function onGridCreated() {
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            grid.isAssignedValues = {};
+            grid.isEditViewValues = {};
+        }
+
+        function onQueryCellInfo(args) {
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            var rowData = args.data;
+            var cellElement = args.cell;
+
+            if (args.column.field === "IsAssigned" || args.column.field === "IsEditView") {
+                var input = document.createElement("input");
+                input.type = "checkbox";
+                input.name = args.column.field + "_" + rowData.Code;
+                input.className = "checkbox-custom";
+
+                if (args.column.field === "IsAssigned") {
+                    input.checked = rowData.IsAssigned;
+                    input.onclick = function () {
+                        toggleAssignment(rowData.Code, this.checked);
+                    };
+                } else if (args.column.field === "IsEditView") {
+                    input.checked = rowData.IsEditView;
+                    input.disabled = !rowData.IsAssigned; // Disable IsEditView if IsAssigned is not checked
+                    input.onclick = function () {
+                        if (rowData.IsAssigned) {
+                            toggleEditView(rowData.Code, this.checked);
+                        } else {
+                            alert("IsEditView can only be selected if IsAssigned is selected.");
+                            this.checked = false;
+                        }
+                    };
+                }
+
+                cellElement.innerHTML = "";
+                cellElement.appendChild(input);
+            }
+        }
+
+        function toggleAssignment(code, isChecked) {
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            var dataSource = grid.getCurrentViewRecords();
+            var rowIndex = dataSource.findIndex(row => row.Code === code);
+            if (rowIndex !== -1) {
+                dataSource[rowIndex].IsAssigned = isChecked;
+                grid.refresh();
+            }
+        }
+
+        function toggleEditView(code, isChecked) {
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            var dataSource = grid.getCurrentViewRecords();
+            var rowIndex = dataSource.findIndex(row => row.Code === code);
+            if (rowIndex !== -1) {
+                dataSource[rowIndex].IsEditView = isChecked;
+                grid.refresh();
+            }
+        }
+
+        $(document).ready(function () {
+            var optionsa = {
+                rules: {
+                    'Code': { required: [true, "Please select role"] }
+                }
+            };
+
+            var dialog = new ej.popups.Dialog({
+                header: 'Warning',
+                content: '<div>Please select at least one Menu</div>',
+                buttons: [
+                    { buttonModel: { content: 'Ok', isPrimary: true }, click: clearDialogDiv }
+                ]
+            });
+
+            function clearDialogDiv() {
+                dialog.hide();
+                var dialogDiv = document.getElementById("Dilog");
+                if (dialogDiv) {
+                    while (dialogDiv.firstChild) {
+                        dialogDiv.removeChild(dialogDiv.firstChild);
+                    }
+                }
+            }
+
+            function gatherFormData() {
+                var dropdownObj = document.getElementById('Code').ej2_instances[0];
+                var dropdownValue = dropdownObj.value;
+                var gridObj = document.getElementById('Grid').ej2_instances[0]; // Ensure you have the right grid instance
+
+                // Collect all data from the grid's data source
+                var dataSource = gridObj.dataSource;
+
+                var gridData = dataSource
+                    .filter(function (rowData) {
+                        return rowData.IsAssigned === true; // Only include rows where IsAssigned is checked
+                    })
+                    .map(function (rowData) {
+                        return {
+                            Code: rowData.Code,
+                            MenuName: rowData.MenuName,
+                            IsAssigned: rowData.IsAssigned,
+                            IsEditView: rowData.IsEditView || false // Set IsEditView to false if it is null
+                        };
+                    });
+
+                var postData = {
+                    DropdownValue: dropdownValue,
+                    GridData: gridData
+                };
+
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'RMM_Form',
+                    contentType: 'application/json',
+                    data: JSON.stringify(postData),
+                    success: function (response) {
+                        console.log("Response from server:", response);
+                        window.location.href = "/RoleMenuMapping/RMM_Form";
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", status, error);
+                    }
+                });
+            }
+
+            var formObject = new ej.inputs.FormValidator('#RoleForm', optionsa);
+
+            var saveButton = document.getElementById('submitButton');
+            saveButton.addEventListener('click', function (event) {
+                var isValid = formObject.validate();
+                if (isValid) {
+                    gatherFormData();
+                } else {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        function onUserChange(args) {
+            var userId = args.itemData.Value;
+            window.location.href = '@Url.Action("RMM_Form", "RoleMenuMapping")' + '?roleid=' + userId;
+        }
+
+        function onfilters(e) {
+            var query = new ej.data.Query();
+            query = (e.text !== '') ? query.where('Text', 'startswith', e.text, true) : query;
+            e.updateData(Html.Raw(JsonConvert.SerializeObject(ViewBag.Roles)), query);
+        }
+
+        function resetForm() {
+
+            window.location.href = '@Url.Action("RMM_Form", "RoleMenuMapping")';
+            var dropdownObj = document.getElementById('Code').ej2_instances[0];
+            dropdownObj.value = 'er'; // Reset dropdown
+            document.getElementById('RoleForm').reset();
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            grid.clearSelection(); // Clear grid selection
+
+
+            var responseSpan = document.getElementById('responseSpan');
+            if (responseSpan) {
+                responseSpan.innerHTML = "";
+            }
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @*  <script type="text/javascript">
+        function onGridCreated() {
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            grid.isAssignedValues = {};
+            grid.isEditViewValues = {};
+        }
+
+        function onQueryCellInfo(args) {
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            var rowData = args.data;
+            var cellElement = args.cell;
+
+            if (args.column.field === "IsAssigned" || args.column.field === "IsEditView") {
+                var input = document.createElement("input");
+                input.type = "checkbox";
+                input.name = args.column.field + "_" + rowData.Code;
+                input.className = "checkbox-custom";
+
+                if (args.column.field === "IsAssigned") {
+                    input.checked = rowData.IsAssigned;
+                    input.onclick = function () {
+                        toggleAssignment(rowData.Code, this.checked);
+                    };
+                } else if (args.column.field === "IsEditView") {
+                    input.checked = rowData.IsEditView;
+                    input.disabled = !rowData.IsAssigned; // Disable IsEditView if IsAssigned is not checked
+                    input.onclick = function () {
+                        if (rowData.IsAssigned) {
+                            toggleEditView(rowData.Code, this.checked);
+                        } else {
+                            alert("IsEditView can only be selected if IsAssigned is selected.");
+                            this.checked = false;
+                        }
+                    };
+                }
+
+                cellElement.innerHTML = "";
+                cellElement.appendChild(input);
+            }
+        }
+
+        function toggleAssignment(code, isChecked) {
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            var dataSource = grid.getCurrentViewRecords();
+            var rowIndex = dataSource.findIndex(row => row.Code === code);
+            if (rowIndex !== -1) {
+                dataSource[rowIndex].IsAssigned = isChecked;
+                grid.refresh();
+            }
+        }
+
+        function toggleEditView(code, isChecked) {
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            var dataSource = grid.getCurrentViewRecords();
+            var rowIndex = dataSource.findIndex(row => row.Code === code);
+            if (rowIndex !== -1) {
+                dataSource[rowIndex].IsEditView = isChecked;
+                grid.refresh();
+            }
+        }
+
+        $(document).ready(function () {
+            var optionsa = {
+                rules: {
+                    'Code': { required: [true, "Please select role"] }
+                }
+            };
+
+            var dialog = new ej.popups.Dialog({
+                header: 'Warning',
+                content: '<div>Please select at least one Menu</div>',
+                buttons: [
+                    { buttonModel: { content: 'Ok', isPrimary: true }, click: clearDialogDiv }
+                ]
+            });
+
+            function clearDialogDiv() {
+                dialog.hide();
+                var dialogDiv = document.getElementById("Dilog");
+                if (dialogDiv) {
+                    while (dialogDiv.firstChild) {
+                        dialogDiv.removeChild(dialogDiv.firstChild);
+                    }
+                }
+            }
+
+            function gatherFormData() {
+                var dropdownObj = document.getElementById('Code').ej2_instances[0];
+                var dropdownValue = dropdownObj.value;
+                var gridObj = document.getElementById('Grid').ej2_instances[0]; // Ensure you have the right grid instance
+
+                // Collect all data from the grid's data source
+                var dataSource = gridObj.dataSource;
+
+                var gridData = dataSource
+                    .filter(function (rowData) {
+                        return rowData.IsAssigned === true; // Only include rows where IsAssigned is checked
+                    })
+                    .map(function (rowData) {
+                        return {
+                            Code: rowData.Code,
+                            MenuName: rowData.MenuName,
+                            IsAssigned: rowData.IsAssigned,
+                            IsEditView: rowData.IsEditView
+                        };
+                    });
+
+                var postData = {
+                    DropdownValue: dropdownValue,
+                    GridData: gridData
+                };
+
+                console.log(postData);
+
+                // $.ajax({
+                //     type: 'POST',
+                //     url: 'RMM_Form',
+                //     contentType: 'application/json',
+                //     data: JSON.stringify(postData),
+                //     success: function (response) {
+                //         console.log("Response from server:", response);
+                //         window.location.href = "/Admin/RoleMenuMapping/RMM_Form";
+                //     },
+                //     error: function (xhr, status, error) {
+                //         console.error("Error:", status, error);
+                //     }
+                // });
+            }
+
+            var formObject = new ej.inputs.FormValidator('#RoleForm', optionsa);
+
+            var saveButton = document.getElementById('submitButton');
+            saveButton.addEventListener('click', function (event) {
+                var isValid = formObject.validate();
+                if (isValid) {
+                    gatherFormData();
+                } else {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        function onUserChange(args) {
+            var userId = args.itemData.Value;
+            window.location.href = '@Url.Action("RMM_Form", "RoleMenuMapping", new)' + '?roleid=' + userId;
+        }
+
+        function onfilters(e) {
+            var query = new ej.data.Query();
+            query = (e.text !== '') ? query.where('Text', 'startswith', e.text, true) : query;
+            e.updateData(Html.Raw(JsonConvert.SerializeObject(ViewBag.Roles)), query);
+        }
+
+        function resetForm() {
+            var dropdownObj = document.getElementById('Code').ej2_instances[0];
+            dropdownObj.value = ''; // Reset dropdown
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            grid.clearSelection(); // Clear grid selection
+
+            var responseSpan = document.getElementById('responseSpan');
+            if (responseSpan) {
+                responseSpan.innerHTML = "";
+            }
+        }
+    </script> *@
+    }

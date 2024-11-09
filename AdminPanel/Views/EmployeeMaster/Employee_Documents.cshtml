@@ -1,0 +1,530 @@
+﻿@{
+
+    List<object> GridCommands = new List<object>();
+
+
+
+    GridCommands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete btnDelete", cssClass = "e-flat" } });
+}
+<div id="ExistDilog" class="w-25"></div>
+<div id="EmpMasterDilog" class="w-25"></div>
+<div id="Doc_DeleteDilog" class="w-25"></div>
+<div id="DilSuccessDoc" class="w-25"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card rounded shadow-sm">
+                <div class="card-body">
+
+                    <form id="EmpDocument">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+
+                            <div class="col-lg-3 col-md-6 col-sm-12" style="display:none">
+                                <ejs-textbox name="Sys_Code_Doc" id="Sys_Code_Doc" floatLabelType=Auto placeholder="Sys_Code_Doc"></ejs-textbox>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-12" id="BrowseDocuments">
+                                <label for="Documents" class="w-100 text-secondary mt-2" style="font-size:13px">Add Employee Documents </label>
+                                <ejs-uploader id="Emp_documents1" name="Emp_documents1" cssClass="EmpDoc" placeholder=" Employee Documents *" multiple="false" allowedExtensions=".jpeg,.jpg,.png,.pdf"></ejs-uploader>
+                                <span id="err_Emp_documents1" style="font-size:12px;color:#f44336"></span>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-textbox name="document_type" id="document_type" floatLabelType=Auto placeholder="Document Type *"></ejs-textbox>
+                            </div>
+
+                        </div>
+
+                    </form>
+                    <div class="col-lg-3 col-md-6 col-sm-12 mt-3 mb-3">
+                        <button type="button" id="SubmitEmpDoc" name="SubmitEmpDoc" class="e-btn bg-success text-light w-25">Add</button>
+                    </div>
+
+                    <div>
+                        <ejs-grid id="GridEmpDoc" dataSource="@ViewBag.GetEmpDocDetails" allowSorting="true" allowPaging="true" allowResizing="true" allowFiltering="true" allowExcelExport="true" toolbar="@(new List<string>() {"Documents Grid","Search" })">
+                            <e-grid-editsettings></e-grid-editsettings>
+                            <e-grid-filterSettings type="Excel"></e-grid-filterSettings>
+                            <e-grid-pageSettings pageSize="5" pageSizes="@(new string[] { "5", "10" ,"12","15"," 20", "All" })" />
+                            <e-grid-columns>
+                                <e-grid-column headerText="Option" textAlign="Left" width="105" commands="GridCommands"></e-grid-column>
+                                <e-grid-column field="sys_code" isPrimaryKey="true" visible="false" headerText="Id" textAlign="Right" width="105"></e-grid-column>
+                                <e-grid-column field="EmpCode" headerText="Employee Name" textAlign="Left" width="180"></e-grid-column>
+                                <e-grid-column field="document_Name" headerText="Document Name" textAlign="Left" width="220"></e-grid-column>
+                                <e-grid-column field="Document_Type" headerText="Document Type " textAlign="Left" width="220"></e-grid-column>
+                                <e-grid-column field="empdocumentBase64" headerText="Document" textAlign="Left" width="200" filter="true" template="#template3"></e-grid-column>
+                                <e-grid-column field="OrgCode" headerText="Organization Name" textAlign="Left" width="220"></e-grid-column>
+                                <e-grid-column field="Sys_Created_By" width="150" textAlign="Left" headerText="Created By" allowFiltering="false" filter="false"></e-grid-column>
+                                <e-grid-column field="Sys_Created_On" width="150" textAlign="Left" headerText="Created On" allowFiltering="false" filter="false"></e-grid-column>
+                                <e-grid-column field="Sys_Modified_By" width="150" textAlign="Left" headerText="Modified By" allowFiltering="false" filter="false"></e-grid-column>
+                                <e-grid-column field="Sys_Modified_On" width="150" textAlign="Left" headerText="Modified On" allowFiltering="false" filter="false"></e-grid-column>
+                            </e-grid-columns>
+                        </ejs-grid>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script id="template3" type="text/x-template">
+
+    <div>
+          <a href="${empdocumentBase64}" class="Docanchor" download="${document_Name}" rel="noopener noreferrer">Download</a>
+    </div>
+</script>
+<script>
+
+
+
+    
+
+
+</script>
+
+<script>
+    var id = null;
+    $(document).ready(function () {
+        var optionsa = {
+            rules: {
+
+                'document_type': { required: [true, "Please enter document type"] }
+
+            }
+        }
+
+
+        var formObject = new ej.inputs.FormValidator('#EmpDocument');
+        console.log(formObject);
+        formObject.rules = optionsa.rules,
+            formObject.customPlacement = function (inputElement, errorElement) {
+                var elementType = inputElement.tagName.toLowerCase();
+                var parentElement = inputElement.parentElement.parentElement;
+
+                if (elementType === "input" || elementType === "textarea" || elementType === "select") {
+                    parentElement.appendChild(errorElement);
+                } else if (elementType === "ejs-numerictextbox" || elementType === "ejs-textbox" || elementType === "ejs-dropdownlist" || elementType === "ejs-datepicker" || elementType === "ejs-uploader") {
+                    parentElement.parentElement.appendChild(errorElement);
+                }
+            }
+
+
+        var saveButton = document.getElementById('SubmitEmpDoc');
+        saveButton.addEventListener('click', function (event) {
+
+            var IsValid = formObject.validate();
+            if (IsValid) {
+                var Emp = document.getElementById('Sys_Code').ej2_instances[0].value;
+
+                if (Emp != null) {
+                    var formData = new FormData();
+                    formData.append('Sys_Code', document.getElementById('Sys_Code').value);
+                    formData.append('document_type', document.getElementById('document_type').value);
+
+                    $.ajax({
+                        url: '@Url.Action("Employee_Documents_Check", "EmployeeMaster")',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            console.log(response);
+                            if (response == false) {
+                                console.log("SaveDocuments call");
+                                SaveDocuments(Emp);
+
+                            }
+                            else {
+                                clearDialogExist();
+                                Existdialog.appendTo('#ExistDilog');
+                                if (Existdialog) {
+
+                                    Existdialog.show(); // Show the dialog
+                                }
+                            }
+                        },
+                        error: function (error) {
+                            alert('Error uploading file.');
+                        }
+                    });
+
+
+
+                } else {
+                    clearDialogEmpMaster();
+                    EmpMasterdialog.appendTo('#EmpMasterDilog');
+                    if (EmpMasterdialog) {
+
+                        EmpMasterdialog.show(); // Show the dialog
+                    }
+                }
+
+            } else {
+                event.preventDefault();
+            }
+        });
+
+        //Already Document exist PopUp
+        var Existdialog = new ej.popups.Dialog({
+            header: 'Warning',
+            content: '<div>Document Type Already Exists</div>',
+            buttons: [
+                { buttonModel: { content: 'Yes', isPrimary: true }, click: HideDialogExist }
+
+            ]
+
+        });
+
+        //Fill Master Employee Form Popup
+        var EmpMasterdialog = new ej.popups.Dialog({
+            header: 'Warning',
+            content: '<div>Please Fill Employee Details</div>',
+            buttons: [
+                { buttonModel: { content: 'Yes', isPrimary: true }, click: HideDialogEmpMaster }
+
+            ]
+
+        });
+
+
+       
+
+
+        function HideDialogExist() {
+            console.log(Existdialog);
+            if (Existdialog) { clearDialogExist(); Existdialog.hide(); }
+            //
+
+        }
+
+
+        function HideDialogEmpMaster() {
+            console.log(EmpMasterdialog);
+            if (EmpMasterdialog) { clearDialogEmpMaster(); EmpMasterdialog.hide(); }
+        }
+
+
+        function clearDialogExist() {
+
+            var dialogDiv = document.getElementById("ExistDilog");
+            if (dialogDiv) {
+                while (dialogDiv.firstChild) {
+                    dialogDiv.removeChild(dialogDiv.firstChild);
+                }
+            }
+        }
+
+
+        function clearDialogEmpMaster() {
+            var dialogDiv = document.getElementById("EmpMasterDilog");
+            if (dialogDiv) {
+                while (dialogDiv.firstChild) {
+                    dialogDiv.removeChild(dialogDiv.firstChild);
+                }
+            }
+        }
+        
+    })
+    function clearDialog_Delete() {
+
+        var dialogDiv = document.getElementById("Doc_DeleteDilog");
+        if (dialogDiv) {
+            while (dialogDiv.firstChild) {
+                dialogDiv.removeChild(dialogDiv.firstChild);
+            }
+        }
+    }
+
+
+    function SaveDocuments(Emp) {
+      
+
+        var formData = new FormData();
+        var fileInput = document.getElementById('Emp_documents1').ej2_instances[0];
+        var files = fileInput.getFilesData();
+
+        var BrowseDocument = document.getElementById('Emp_documents1').ej2_instances[0].getFilesData();
+
+
+
+        var err_bd = document.getElementById('err_Emp_documents1');
+
+        console.log("bd value", BrowseDocument);
+
+        err_bd.innerHTML = '';
+
+        if (BrowseDocument.length == 0) {
+            err_bd.innerHTML = "Please upload document";
+            err_bd.innerHTML.style = "color:red";
+            return;
+        }
+
+        if (files.length > 0) {
+            formData.append('Emp_documents1', files[0].rawFile);
+        }
+
+        formData.append('document_type', document.getElementById('document_type').value);
+        formData.append('Sys_Code_Doc', document.getElementById('Sys_Code_Doc').value);
+        formData.append('Sys_Code', document.getElementById('Sys_Code').value);
+        console.log(formData);
+
+
+        $.ajax({
+            url: '@Url.Action("Employee_Documents", "EmployeeMaster")',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                 console.log(response);
+                if (response != null) {
+                    resetDocumentsForm();
+                 
+
+                    // Assuming response is an array of objects with fields like OrderID, CustomerID, etc.
+                    var gridInstance = document.getElementById("GridEmpDoc").ej2_instances[0];
+
+                    console.log(gridInstance);
+
+                    gridInstance.dataSource = response;
+                    gridInstance.refresh();  // Refresh the grid to apply new data
+
+              
+
+                }
+                // alert('File uploaded successfully!');
+            },
+            error: function (error) {
+                alert('Error uploadi');
+                console.log(error);
+            }
+        });
+    }
+
+
+    function updateTemplateWithData(data) {
+
+
+        alert("function called");
+
+        console.log(data);
+
+        // Retrieve grid's template element
+        var templateElement = document.getElementById('template3');
+
+        if (templateElement) {
+            // Clear previous template content
+            templateElement.innerHTML = '';
+
+            // Generate new template content with updated data
+            data.forEach(function (item) {
+
+
+                // console.log(item.documentBase64);
+                // console.log(item.document_Name);
+
+
+                var aTag = document.createElement('a');
+
+               
+                
+                aTag.href = item.documentBase64;
+
+                aTag.download = item.document_Name;
+
+                console.log(aTag);
+                templateElement.appendChild(aTag);
+
+                console.log(templateElement);
+            });
+        }
+    }
+
+
+    function resetDocumentsForm() {
+     
+        document.getElementById('EmpDocument').reset();
+
+    }
+
+
+    //Confirm box for delete
+    var Delete_Dilog = new ej.popups.Dialog({
+        header: 'Confirm Delete',
+        content: '<div>Are you sure you want to delete this record?</div>',
+        buttons: [
+            { buttonModel: { content: 'Yes', isPrimary: true }, click: onYesDeleteDocClick, id: 'confirmDelete' },
+            { buttonModel: { content: 'No' }, click: onNoDeleteDocClick, id: 'cancelDelete' }
+        ]
+
+    });
+
+
+    var Delete_Msg = new ej.popups.Dialog({
+        header: 'Success',
+        content: '<div>Deleted SucessFully</div>',
+        buttons: [
+            { buttonModel: { content: 'Ok', isPrimary: true }, click: onOkDocClick, id: 'confirmDelete' },
+           
+        ]
+
+    });
+
+
+    function onOkDocClick() { clearDialog_Success(); Delete_Msg.hide(); }
+    function clearDialog_Success() {
+
+        var dialogDiv = document.getElementById("DilSuccessDoc");
+        if (dialogDiv) {
+            while (dialogDiv.firstChild) {
+                dialogDiv.removeChild(dialogDiv.firstChild);
+            }
+        }
+    }
+
+
+
+    function handledeleteEmpDocument(rowData) {
+     
+        clearDialog_Delete();
+
+        Delete_Dilog.appendTo('#Doc_DeleteDilog');
+        var grid = document.getElementById("GridEmpDoc").ej2_instances[0];
+        var data = grid.getRowObjectFromUID(rowData).data;
+        console.log("Delete command clicked", data.sys_code);
+        id = data.sys_code;
+        console.log(id);
+        if (Delete_Dilog) {
+            Delete_Dilog.show(); // Show the dialog
+        }
+
+    }
+
+
+    function onYesDeleteDocClick() {
+        Delete_Dilog.hide();
+        clearDialog_Delete();
+        console.log("Yes button clicked", id)
+        if (id > 0) {
+            $.ajax({
+                "url": '@Url.Action("Delete_Employee_Documents", "EmployeeMaster")',
+                method: "GET",
+                data: { Sys_Code: id },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if (data !=null) {
+                        var grid = document.getElementById('GridEmpDoc').ej2_instances[0];
+                        if (grid) {
+                            grid.dataSource = data;
+                           grid.refresh();
+                            clearDialog_Success();
+                            Delete_Msg.appendTo('#DilSuccessDoc');
+                            Delete_Msg.show();
+                        }
+                    }
+
+                },
+                error: function (err) {
+                    console.log("error: " + err)
+                }
+
+            })
+        }
+        id = 0;
+
+
+    }
+    function onNoDeleteDocClick() {
+
+        Delete_Dilog.hide();
+        clearDialog_Delete();
+    }
+
+    function handleEditEmpDocument(rowData) {
+        // Example: Implement logic to handle edit command
+        var grid = document.getElementById("GridEmpDoc").ej2_instances[0];
+        var data = grid.getRowObjectFromUID(rowData).data;
+        console.log("Edit command clicked", data);
+        var EditId = data.sys_code;
+        console.log(EditId);
+        // $.ajax({
+        //     "url": '@Url.Action("Get_Employee_GL_Mapping", "EmployeeMaster")',
+        //     method: "GET",
+        //     data: { Id: EditId },
+        //     dataType: 'json',
+        //     success: function (data) {
+        //         console.log("Fhhhh");
+        //         console.log(data.sys_Code_Gl
+        //         );
+        //         if (data != null) {
+        //             console.log("response data");
+        //             console.log(data);
+
+        //             var SysCodeGL = document.getElementById('Sys_Code_Gl').ej2_instances[0];
+        //             console.log(SysCodeGL);
+        //             SysCodeGL.value = data.sys_Code_Gl;
+
+        //             var GL_AccountCode = document.getElementById('GL_AccountCode').ej2_instances[0];
+        //             GL_AccountCode.value = data.glAccountCode;
+
+        //             var BranchLocationCode = document.getElementById('Branch_Location_Code_Gl').ej2_instances[0];
+        //             BranchLocationCode.value = data.branchLocationCode;
+
+        //             var CurrencyCode = document.getElementById('CurrencyCode').ej2_instances[0];
+        //             CurrencyCode.value = data.currencyCode;
+
+        //             var Status = document.getElementById('GlStatus').ej2_instances[0];
+        //             Status.value = data.status;
+
+        //             var Note = document.getElementById('GlNote').ej2_instances[0];
+        //             Note.value = data.note
+        //                 ;
+        //         }
+
+        //     },
+        //     error: function (err) {
+        //         window.location.href = errorViewUrl;
+        //         console.log("error: " + err)
+        //     }
+
+        // })
+
+
+
+
+    }
+
+
+    document.body.addEventListener("click", function (event) {
+        var target = event.target;
+
+        if (target.classList.contains("e-editbutton") || target.classList.contains("btnEdit")) {
+
+            var row = target.closest("tr");
+            var grid = row.closest(".e-grid");
+            console.log("ggggg" + grid)
+            if (grid && grid.id === "GridEmpDoc") {
+               
+                var rowData = row.getAttribute("data-uid");
+                handleEditEmpDocument(rowData);
+                // Handle edit for GridMapping
+            }
+        } else if (target.classList.contains("e-deletebutton") || target.classList.contains("btnDelete")) {
+           
+            var row = target.closest("tr");
+            console.log(row);
+            var grid = row.closest(".e-grid");
+            var rowData = row.getAttribute("data-uid");
+            console.log(rowData);
+      
+          
+            if ( grid.id === "GridEmpDoc") {
+               
+                handledeleteEmpDocument(rowData);
+            }
+        }
+    });
+</script>

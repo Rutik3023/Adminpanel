@@ -1,0 +1,595 @@
+﻿@model  AdminPanel.Models.Login
+@using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/Login_Layout.cshtml";
+}
+
+@{
+    var resp = ViewBag.RespMsg;
+    var resp2 = ViewBag.UserIdForMAchineDetails != null ? JsonConvert.SerializeObject(ViewBag.UserIdForMAchineDetails) : "null";
+    var UserId = ViewBag.UserIdForActiveDeactivePage != null ? JsonConvert.SerializeObject(ViewBag.UserIdForActiveDeactivePage) : "null";
+    var activeUserData = ViewBag.ActiveUserData as  AdminPanel.Models.Login;
+    var Loginsessionstatus = ViewBag.Loginsessionstatus != null ? JsonConvert.SerializeObject(ViewBag.Loginsessionstatus) : "null";
+    var resp3 = ViewBag.LoginLimitOver;
+    var resp1 = ViewBag.InvalidOrgNo;
+
+
+}
+
+<script src="~/js/loginforgetuser.js"></script>
+
+<div id="RegisterSuccess" class="w-25"></div>
+<div id="LoginDilog" class="w-25"></div>
+<div id="LoginDilog2" class="w-25 " style="border-radius: 10px; border: 1px ; padding: 10px;"></div>
+<div id="Login2Dilog" class="w-25"></div>
+<div id="UserForgetDilog" class="w-25"></div>
+
+<div id="dialogfrgtUser" class="w-25"></div>
+<div id="dialogfrgtPass" class="w-25"></div>
+<div id="dialogContent" class="d-none">
+    <span id="emailError" class="error-message text-danger" style="font-weight:bold"></span>
+    <form id="frgtUser_Form">
+        <div class="col-11">
+            <input type="text" id="Regist_Email" name="Regist_Email" class="e-control e-textbox e-lib e-input" placeholder="Register Mail">
+            <span id="ValidationError" class="text-danger"></span>
+        </div>
+    </form>
+    <button id="submitMail" class="e-btn mt-4 bg-danger text-light">Submit</button>
+</div>
+
+<div id="dialogContent2" class="d-none">
+    <span id="emailError2" class="error-message text-danger" style="font-weight:bold"></span>
+    <form id="frgtPass_Form">
+        <div class="col-11">
+            <input type="text" id="UserName" name="UserName" class="e-control e-textbox e-lib e-input" placeholder="User Name">
+            <span id="ValidationErrorUserName" class="text-danger"></span>
+            <input type="text" id="Regist_Email_Pass" name="Regist_Email" class="e-control e-textbox e-lib e-input" placeholder="Register Mail">
+            <span id="ValidationErrorPass" class="text-danger"></span>
+        </div>
+    </form>
+    <button id="Mailfrgt" class="e-btn mt-4 bg-danger text-light">Submit</button>
+</div>
+
+<div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="col-md-6 col-sm-12"></div>
+    <div class="col-md-4 mt-5 col-sm-12">
+        <div class="card mb-0 login-card p-3">
+            <div class="card-body">
+                <div class="text-nowrap logo-img d-block pt-3 w-100">
+                    <h2 class="m-0 p-0"><strong>Welcome Back...</strong></h2>
+                </div>
+                <p>Please Enter your Login credentials</p>
+                <form asp-action="Index" method="post" id="myform">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group mb-4 " style="display:none">
+                        <ejs-textbox id="DuniqueIdentifier" placeholder="DI"></ejs-textbox>
+
+                    </div>
+
+
+                    <div class="form-group mb-4">
+                        <ejs-textbox id="saas_Org_Code" floatLabelType="Always" cssClass="e-outline e-small" placeholder="Saas/Org No *"></ejs-textbox>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <ejs-textbox id="User_Name" cssClass="e-outline e-small" floatLabelType="Always" placeholder="User Name *"></ejs-textbox>
+                        <span asp-validation-for="User_Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        @*  <ejs-textbox id="Password" placeholder="Password" type="Password" cssClass="e-valid-input"></ejs-textbox> *@
+                        <ejs-textbox id="Password" cssClass="e-outline e-small" floatLabelType="Always" placeholder="Password *" type="text" created="onCreate"></ejs-textbox>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input primary" type="checkbox" value="" id="flexCheckChecked">
+                            <label class="form-check-label text-dark" for="flexCheckChecked">Remember this Device</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <ejs-button id="save" content="Submit" class="btn btn-primary w-100 py-8 rounded-2"></ejs-button>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="text-left">
+                            <a class="text-primary list-group-item-action text-decoration-none" href="#" id="ForgetUserTag">Forgot Username?</a>
+                        </div>
+                        <div class="text-right">
+                            <a class="text-primary list-group-item-action btn-link text-decoration-none" href="#" id="ForgetPassTag">Forgot Password?</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 col-sm-12"></div>
+</div>
+
+<div id="dialogforRegisterAuthCode" class="w-25"></div>
+<div id="dialogforAuthContent" class="d-none">
+    <br />
+    <span id="AuthError2" class="error-message text-danger" style="font-weight:bold"></span>
+    <form id="AuthCode_Form">
+        <div class="col-11">
+            <input type="text" id="DeviceAuthCode" name="AuthCode" class="e-control e-textbox e-lib e-input" placeholder="Enter Auth Code">
+            <span id="ValidationErrorAuthCode_err" class="text-danger"></span>
+        </div>
+    </form>
+    <button id="AuthCodeSubmitBtn" class="e-btn mt-4 bg-success text-light">Submit</button>
+</div>
+
+<script>
+    function onCreate() {
+        // Initially hide the password by adding the custom 'hidden-password' class
+        let textObj = document.getElementById("Password").ej2_instances[0];
+        textObj.element.classList.add("hidden-password");
+
+        // Add the eye icon
+        this.addIcon("append", "e-icons e-input-eye");
+
+        // Handle click event to toggle password visibility and switch icons
+        document.getElementsByClassName("e-input-eye")[0].addEventListener("click", function (e) {
+            if (textObj.element.classList.contains("hidden-password")) {
+                // Show password
+                textObj.element.classList.remove("hidden-password");
+
+                // Toggle to eye-slash icon
+                e.target.classList.remove("e-input-eye");
+                e.target.classList.add("e-eye-slash");
+            } else {
+                // Hide password
+                textObj.element.classList.add("hidden-password");
+
+                // Toggle back to eye icon
+                e.target.classList.remove("e-eye-slash");
+                e.target.classList.add("e-input-eye");
+            }
+        });
+    }
+</script>
+
+
+<style>
+
+    .e-input-eye:before {
+        content: '\e345';
+        / Eye icon / font-family: e-icons;
+        font-size: 13px;
+    }
+
+
+    .e-eye-slash:before {
+        content: '\e346';
+        / Eye-slash icon / font-family: e-icons;
+        font-size: 13px;
+    }
+
+
+    .hidden-password {
+        font-family: 'text-security-disc';
+        -webkit-text-security: disc;
+        / Chrome/Safari / text-security: disc;
+        / Older browsers /
+    }
+</style>
+<script>
+
+    $(document).ready(function () {
+
+
+        var AuthTokeForvalidate;
+        var dialog = new ej.popups.Dialog({
+            header: '',
+            content: '',
+            buttons: [{ buttonModel: { content: 'Cancel', isPrimary: true }, click: onOkButtonClick }]
+        });
+
+        var dialogForMachineDet = new ej.popups.Dialog({
+            header: '',
+            content: '',
+            buttons: [
+                { buttonModel: { content: 'Register', isPrimary: true }, click: onRegisterButtonClick },
+                { buttonModel: { content: 'Cancel', isPrimary: true }, click: onRegCansalButtonClick }
+            ]
+        });
+
+        var dialogForAuthCodeValid = new ej.popups.Dialog({
+            header: 'Please enter authentication token,<br>sent to your email<br>',
+            content: document.getElementById('dialogforAuthContent'),
+            visible: false,
+            buttons: [{ buttonModel: { content: 'Cancel', isPrimary: true }, click: oncloseButtonClickAuth }]
+        });
+        var dialogForActiveDevice = new ej.popups.Dialog({
+            header: '',
+            content: '',
+            buttons: [
+                { buttonModel: { content: 'Ok', isPrimary: true }, click: onOkClickToDeactive },
+                { buttonModel: { content: 'Cancel', isPrimary: true }, click: onRegCansalButtonClickk }
+
+            ]
+
+        });
+
+
+
+        var dialogForLogoutUser = new ej.popups.Dialog({
+            header: '',
+            content: '',
+            buttons: [
+                { buttonModel: { content: 'LogOut', isPrimary: true, cssClass: 'cust-btn text-light' }, click: onLogoutUserClick },
+                { buttonModel: { content: 'Cancel', isPrimary: true, cssClass: 'bg-danger text-light' }, click: onLogoutUserCancelButtonClick }
+            ]
+        });
+
+        function onLogoutUserClick() {
+            var userId = document.querySelector('.userId').innerText.split(': ')[1];
+            window.location.href = '@Url.Action("Logout", "Login")' + '?id=' + userId;
+        }
+
+        function onLogoutUserCancelButtonClick() {
+            dialogForLogoutUser.hide();
+            clearDialogDiv();
+        }
+
+
+
+        function oncloseButtonClickAuth() {
+            dialogForAuthCodeValid.hide();
+        }
+
+        function onOkButtonClick() {
+            dialog.hide();
+            clearDialogDiv();
+        }
+
+        function onRegCansalButtonClick() {
+
+            dialogForMachineDet.hide();
+
+        }
+        function onRegCansalButtonClickk() {
+
+            dialogForActiveDevice.hide();
+
+        }
+
+        function clearDialogDiv() {
+            var dialogDiv = document.getElementById("LoginDilog");
+            if (dialogDiv) {
+                while (dialogDiv.firstChild) {
+                    dialogDiv.removeChild(dialogDiv.firstChild);
+                }
+            }
+        }
+
+
+        function clearDialogDivLogout() {
+            var dialogDiv = document.getElementById("LoginDilog2");
+            if (dialogDiv) {
+                while (dialogDiv.firstChild) {
+                    dialogDiv.removeChild(dialogDiv.firstChild);
+                }
+            }
+        }
+
+        function clearDialogDivAuthCode() {
+            var dialogDiv = document.getElementById("dialogforAuthContent");
+            if (dialogDiv) {
+                while (dialogDiv.firstChild) {
+                    dialogDiv.removeChild(dialogDiv.firstChild);
+                }
+            }
+        }
+
+    @if (!string.IsNullOrEmpty(@resp1))
+    {
+        <text>
+                dialog.header = '<div class="text-danger">@Html.Raw("Alert Message")</div>';
+            dialog.content = '<div>@Html.Raw(@resp1)</div>';
+            dialog.appendTo('#LoginDilog');
+            dialog.show();
+        </text>
+    }
+
+    @if (!string.IsNullOrEmpty(@resp))
+    {
+        <text>
+                clearDialogDiv();
+            dialog.header = '<div class="text-danger">@Html.Raw("Alert Message")</div>';
+            dialog.content = '<div>@Html.Raw(@resp)</div>';
+            dialog.appendTo('#LoginDilog');
+            dialog.show();
+        </text>
+    }
+
+
+
+    @if (resp2 != null && @resp2 != "null" && @resp2 != "")
+    {
+        <text>
+                clearDialogDiv();
+            dialogForMachineDet.header = '<div class="text-danger">@Html.Raw("Alert Message")</div>';
+            dialogForMachineDet.content = '<div>@Html.Raw("Kindly Login from registered device! else proceed to register this device.")</div>';
+            dialogForMachineDet.appendTo('#LoginDilog');
+            dialogForMachineDet.show();
+        </text>
+    }
+
+            // @if (!string.IsNullOrEmpty(@resp3))
+        // {
+        //     <text>
+        //             clearDialogDiv();
+        //         dialog.header = '<div class="text-danger">@Html.Raw("Alert Message")</div>';
+        //         dialog.content = '<div>@Html.Raw(@resp3)</div>';
+        //         dialog.appendTo('#LoginDilog');
+        //         dialog.show();
+        //     </text>
+        // }
+        @if (!string.IsNullOrEmpty(@resp3))
+        {
+            <text>
+                    clearDialogDiv();
+                dialogForActiveDevice.header = '<div class="text-danger">@Html.Raw("Alert Messagae")</div>';
+                dialogForActiveDevice.content = '<div>@Html.Raw(@resp3)</div>'; // Use Html.Raw to render @resp3 as raw HTML
+                dialogForActiveDevice.appendTo('#LoginDilog');
+                dialogForActiveDevice.show();
+            </text>
+
+
+        }
+
+
+
+    @if (activeUserData != null)
+    {
+        <text>
+                clearDialogDivLogout();
+            dialogForLogoutUser.header = '';
+            dialogForLogoutUser.content = dialogForLogoutUser.header = '';
+            dialogForLogoutUser.content = "<h4 class=' mb-3 text-danger' > Session limit Reached </h4><p class='mb-4'>As per our security policy, you can log in only one session at a time. Please log out from the previous session to continue this session.</p> <h6 class='mb-1'>Session Details</h6><hr /><p class='userId d-none'><strong>User ID:</strong > @activeUserData.UserId</p> <p><strong>User :</strong > @activeUserData.User_Name</p><p><strong>Device OS :</strong > @activeUserData.Device_OS</p><p><strong>Browser Detail:</strong > @activeUserData.Browser_Detail</p> <p><strong>Device Location :</strong > @activeUserData.Device_Location</p> <p><strong>Last Login : </strong > @activeUserData.LoginTime<p>";
+            dialogForLogoutUser.appendTo('#LoginDilog2');
+            dialogForLogoutUser.show();
+
+
+
+        </text>
+
+
+    }
+
+
+    @if (Loginsessionstatus != null && @Loginsessionstatus != "null" && @Loginsessionstatus != "")
+    {
+        <text>
+
+                                                var Userid = @Html.Raw(@Loginsessionstatus);
+
+            $.ajax({
+                url: '@Url.Action("Logout", "Login")',
+                type: 'POST', // Change to 'GET' if needed
+                data: {
+                    id: Userid,
+                    flag: 2
+                },
+                success: function (response) {
+                    // Handle success, e.g., show a message or redirect
+                    console.log("Logout successful", response);
+
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.error("Logout error:", error);
+                    alert("Logout failed. Please try again.");
+                }
+            });
+            // window.location.href = '@Url.Action("Logout", "Login")' + '?id=' + Userid+ '&flag='+2;
+        </text>
+    }
+
+
+
+
+
+            function onOkClickToDeactive() {
+
+
+                var Userid = @Html.Raw(@UserId);
+
+                console.log(Userid);
+
+                // window.location.href = '@Url.Action("List", "Device_Details")' + '?userCode=' + '', '?ActiveUserCode=' + Userid;
+
+                window.location.href = '@Url.Action("List", "Device_Details")' + '?userCode=' + encodeURIComponent('') + '&ActiveUserCode=' + encodeURIComponent(Userid);
+
+
+            }
+
+        function onRegCansalButtonClick() {
+            dialogForMachineDet.hide();
+            dialogForActiveDevice.hide();
+
+
+        }
+
+
+
+
+
+
+        function onRegisterButtonClick() {
+
+            var UserID = @Html.Raw(resp2);
+
+
+
+            $.ajax({
+                url: '/Login/GnerateAuthTokenRegisterDevice',
+                type: 'GET',
+                data: { useRcode: UserID },
+                success: function (response) {
+                    if (response != null) {
+                        AuthTokeForvalidate = response;
+                        dialogForMachineDet.hide();
+                        // clearDialogDiv();
+                        // clearDialogDivAuthCode();
+                        dialogForAuthCodeValid.appendTo('#dialogforRegisterAuthCode');
+                        document.getElementById('dialogforAuthContent').classList.remove('d-none');
+                        var clearForm = document.getElementById("AuthCode_Form");
+                        clearForm.reset();
+                        // alert("ok")
+                        dialogForAuthCodeValid.show();
+                    } else {
+                        clearDialogDiv();
+                        dialog.header = '<div class="text-danger">Alert Message</div>';
+                        dialog.content = '<div>Something went wrong !!!</div>';
+                        dialog.appendTo('#LoginDilog');
+                        dialog.show();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+        var SubmitButton = document.getElementById('AuthCodeSubmitBtn');
+        if (SubmitButton != null) {
+            SubmitButton.addEventListener('click', function (event) {
+                var AuthInput = document.getElementById('DeviceAuthCode');
+                var AUthError = document.getElementById('ValidationErrorAuthCode_err');
+                var AUthErrorForInavlidToken = document.getElementById('AuthError2');
+
+                var UserID = @Html.Raw(resp2);
+
+                var isValid = true;
+                AUthErrorForInavlidToken.textContent = '';
+                AUthError.textContent = '';
+
+                if (!AuthInput.value.trim()) {
+                    AUthError.textContent = 'Please enter above field';
+                    isValid = false;
+                }
+
+
+                var DevideUniCode = getOrCreateIdentifier();
+
+                if (isValid) {
+                    var AuthFormInputField = document.getElementById('DeviceAuthCode').value;
+
+                    if (AuthFormInputField === AuthTokeForvalidate) {
+                        $.ajax({
+                            url: '/General/Login/RegisterMachineDetails',
+                            type: 'GET',
+                            data: { useRcode: UserID, DeviceMotionEvent: DevideUniCode },
+                            success: function (response) {
+                                if (response != null) {
+                                    dialogForMachineDet.hide();
+                                    clearDialogDiv();
+                                    dialogForAuthCodeValid.hide();
+                                    clearDialogDivAuthCode();
+                                    dialog.header = '<div class="text-danger">Alert Message</div>';
+                                    dialog.content = '<div>' + response + '</div>';
+                                    dialog.appendTo('#RegisterSuccess');
+                                    dialog.show();
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                clearDialogDiv();
+                                dialog.header = '<div class="text-danger">Alert Message</div>';
+                                dialog.content = '<div>Something went wrong !!!</div>';
+                                dialog.appendTo('#LoginDilog');
+                                dialog.show();
+                            }
+                        });
+                    } else {
+                        clearDialogDiv();
+                        dialog.header = '<div class="text-danger">Alert Message</div>';
+                        dialog.content = '<div>Please Enter The Valid Token!</div>';
+                        dialog.appendTo('#LoginDilog');
+                        dialog.show();
+
+                        // AUthErrorForInavlidToken.textContent = 'Please enter the valid token!';
+                        // AuthInput.value = '';
+                    }
+                } else {
+                    event.preventDefault();
+                }
+            });
+        }
+
+        function getOrCreateIdentifier() {
+            let identifier = localStorage.getItem('DuniqueIdentifier');
+            if (!identifier) {
+                identifier = generateUUID();
+                localStorage.setItem('DuniqueIdentifier', identifier);
+            }
+            return identifier;
+        }
+
+        var optionsa = {
+            rules: {
+                'User_Name': { required: [true, "Please enter User Name"] },
+                'Password': { required: [true, "Please enter Password"] },
+                'saas_Org_Code': { required: [true, "Please enter Saas/Org No."] }
+            }
+        };
+
+        var formObject = new ej.inputs.FormValidator('#myform');
+        formObject.rules = optionsa.rules;
+        formObject.customPlacement = function (inputElement, errorElement) {
+            if (inputElement.parentElement && inputElement.parentElement.parentElement) {
+                inputElement.parentElement.parentElement.appendChild(errorElement);
+            }
+        }
+
+        var saveButton = document.getElementById('save');
+        saveButton.addEventListener('click', function (event) {
+            var IsValid = formObject.validate();
+            if (!IsValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+@* Generating unique code at client side for device in localstorage in browser
+ --------------------------Start--------------  *@
+<script>
+
+    $(document).ready(function () {
+
+        const identifier = getOrCreateIdentifier();
+        document.getElementById('DuniqueIdentifier').value = identifier;
+
+
+    });
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    function getOrCreateIdentifier() {
+        let identifier = localStorage.getItem('DuniqueIdentifier');
+        if (!identifier) {
+            identifier = generateUUID();
+            localStorage.setItem('DuniqueIdentifier', identifier);
+        }
+        return identifier;
+    }
+
+    // document.addEventListener('DOMContentLoaded', function () {
+
+    // });
+
+
+
+
+</script>
+@* --------------------------End--------------  *@

@@ -1,0 +1,357 @@
+﻿@model   AdminPanel.Models.Organization_model
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "logo";
+   
+}
+
+
+<h4 class="p-2">Organization Logo Master</h4>
+<div class="container-fluid mt-2">
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+        <form asp-action="logo" enctype="multipart/form-data" id="MyForm" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+            <div class="row">
+            
+                
+                    <div class="form-group col-3">
+                            <ejs-dropdownlist id="OrgCode" name="OrgCode" floatLabelType="Auto" filtering="onfilterinOrg" placeholder="Organization *" ejs-for="@Model.Organization_Code" filterBarPlaceholder="Search" allowFiltering="true" dataSource="@ViewBag.ORG">
+                                @* <e-dropdownlist-fields text="Organization_Name" value="Sys_Code"></e-dropdownlist-fields> *@
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                        </ejs-dropdownlist>
+                       
+                    </div>
+
+                        
+                    
+                @* <div class="form-group col-3">
+                    <label for="Logo" class="w-50 text-secondary" style="font-size:13px">Add Menu Icon</label>
+                    <ejs-uploader id="Logo" allowedExtensions=".jpg, .jpeg, .png" multiple="false" name="Logo" typeof="jpg" async-settings="@{
+                    new Syncfusion.EJ2.Inputs.UploaderAsyncSettings { SaveUrl = "Organization/Organization/logo", RemoveUrl = "" };
+                }" style="flex: 1;">
+                    </ejs-uploader>
+                </div> *@
+
+                        <div class="col-3">
+                            <ejs-textarea id="Note" maxlength="4000" rows="1" floatLabelType=Auto placeholder="Note" ejs-for="@Model.Note"></ejs-textarea>
+
+                        </div>
+
+                        <div class="form-group col-3" id="BrowseImg">
+                            <label for="Logo" class="w-50 text-secondary" style="font-size:13px">Add Logo </label>
+                            <ejs-uploader id="Logo" allowedExtensions=".jpg, .jpeg, .png"
+                                          multiple="false" selected="onSelect" name="Logo"
+                                          async-settings="@{
+                      new Syncfusion.EJ2.Inputs.UploaderAsyncSettings { SaveUrl = "Organization/Organization/logo", RemoveUrl = "" };
+                  }"
+                                          style="flex: 1;">
+                            </ejs-uploader>
+                            <input type="hidden" id="newLogoBase64" name="newLogoBase64" />
+                            <input type="hidden" id="existingLogoBase64" name="existingLogoBase64" value="@ViewBag.LogoInfo?.LogoImg" />
+                            <img id="logoPreview" src="" alt="Logo Preview" style="width:136px; height:46px; display:none;" />
+                        </div>
+
+
+                        <div class="form-group col-3">
+                            @* <div class="card"> *@
+
+                            @* @if (ViewBag.LogoInfo != null)
+                            {
+                            var mimeType = ViewBag.LogoInfo.MimeType ?? "image/png"; // Default to image/png if MimeType is null
+                            var logoImg = ViewBag.LogoInfo.LogoImg ?? string.Empty; // Default to empty string if LogoImg is null
+
+                            if (!string.IsNullOrEmpty(logoImg))
+                            {
+                            <img src="data:@mimeType;base64,@logoImg" alt="@ViewBag.LogoInfo.Organization_Name" style="width:136px; height:46px;" />
+                            }
+                            else
+                            {
+                            <p>No logo available.</p>
+                            }
+                            }
+                            else
+                            {
+                            <p>No logo information available.</p>
+                            } *@
+
+                            @if (ViewBag.LogoInfo != null)
+                            {
+                                var mimeType = ViewBag.LogoInfo.MimeType ?? "image/png";
+                                var logoImg = ViewBag.LogoInfo.LogoImg ?? string.Empty;
+
+                                if (!string.IsNullOrEmpty(logoImg))
+                                {
+                                    <img id="newLogo" src="data:@mimeType;base64,@logoImg" alt="@ViewBag.LogoInfo.Organization_Name"  style="width:136px; height:46px;" />
+                                    <input type="hidden" name="existingLogoBase64" value="@logoImg" />
+                                    <input type="hidden" name="existingMimeType" value="@mimeType" />
+
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                            else
+                            {
+                                @* <img id="newLogo" style="display: none; width: 100%; height: 100%;"> *@
+                            }
+
+
+
+
+
+                            @* <img src="data:@ViewBag.LogoInfo.MimeType;base64,@ViewBag.LogoInfo.LogoImg" alt="@ViewBag.LogoInfo.Organization_Name" style="width:136px; height:46px;" /> *@
+                            @* <div class="card-content">
+                            <p>@ViewBag.LogoInfo.Organization_Name</p>
+                            </div> *@
+                            @* </div> *@
+                        </div>
+
+                        
+                        <div class="form-group pt-2 text-end me-5">
+                                <input type="submit" class="e-btn cust-btn text-light" id="SubmitBtn" value="Submit"></input>
+                                <a asp-action="LogoList" Class="e-btn bg-light text-dark">Back</a>
+                </div>
+              @*   <label asp-for="Logo" class="control-label"></label>
+                <input asp-for="Logo" class="form-control" />
+                <span asp-validation-for="Logo" class="text-danger"></span> *@
+            </div>
+  
+            
+        </form>
+    </div>
+    </div>
+    </div>
+</div>
+</div>
+<div id="Dilog" class="w-25"></div>
+@{
+    bool showPopup = TempData["ShowPopup"] != null && (bool)TempData["ShowPopup"];
+}
+@if (showPopup)
+{
+   @*  <script type="text/javascript">
+        $(document).ready(function () {
+        var dialog = new ej.popups.Dialog({
+        header: 'ALERT',
+        content: '<div> Logo updated successfully.</div>',
+        buttons: [
+        { buttonModel: { content: 'OK', isPrimary: true }, click: onOkButtonClick, id: 'confirmOk' }
+        ]
+        });
+        dialog.appendTo('#dialog');
+        dialog.show(); // Show the dialog
+        });
+    </script> *@
+
+    @* <div id="dialog" class="w-25"></div> *@
+}
+
+<script>
+
+
+    var option = {
+        rules: {
+
+            //'Logo': { required: [true, "Please Select document"] },
+            'OrgCode': { required: [true, "Please select Organization."] }
+
+        },
+        errorPlacement: function (error, element) {
+            var errorId = element.id + 'Error';
+            var errorSpan = document.getElementById(errorId);
+            if (errorSpan) {
+                errorSpan.textContent = error.textContent;
+            }
+        }
+    };
+
+    var saveButton = document.getElementById('SubmitBtn');
+    formObjectContainer = new ej.inputs.FormValidator('#MyForm');
+
+    formObjectContainer.rules = option.rules;
+
+    formObjectContainer.customPlacement = function (element, errorElement) {
+
+        if (element.parentElement && element.parentElement.parentElement) {
+
+            element.parentElement.parentElement.appendChild(errorElement);
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var container = document.getElementById('BrowseImg');
+
+        container.addEventListener('click', function (event) {
+            if (event.target && event.target.matches('.e-icons.e-file-remove-btn')) {
+                console.log("Clicked on element in container");
+                console.log(event.target);
+                clearImage();
+                // Perform actions specific to container 
+            }
+        });
+    });
+
+
+
+    document.getElementById('MyForm').addEventListener('submit', function (event) {
+        var sysCodeInput = document.getElementById("OrgCode");
+        if (sysCodeInput.value && sysCodeInput.value !== "") {
+            event.preventDefault();
+
+            var dialog = new ej.popups.Dialog({
+                header: 'ALERT',
+                content: '<div>Are you sure you want to replace with previous Logo?</div>',
+                buttons: [
+                    { buttonModel: { content: 'Yes', isPrimary: true }, click: function () { YesSubmit(); }, id: 'confirmsubmit' },
+                    { buttonModel: { content: 'No' }, click: function () { onNoButtonClick(); }, id: 'cancelsubmit' }
+                ],
+                showCloseIcon: true,
+                width: '250px',
+                target: document.body
+            });
+
+            dialog.appendTo('#Dilog');
+            dialog.show();
+        }
+ 
+    });
+    
+        // $(document).ready(function () {
+        //     // Initialize the uploader and get the instance
+        //     var uploader = document.getElementById('Logo').ej2_instances[0];
+
+        //     // Add change event listener
+        //     uploader.addEventListener('change', function (args) {
+        //         var files = args.fileList; // Get the list of uploaded files
+
+        //         // Check if a file has been selected
+        //         if (files && files.length > 0) {
+        //             var file = files[0]; // Get the first file
+        //             var reader = new FileReader();
+
+        //             // Read the file and show the preview
+        //             reader.onload = function (e) {
+        //                 var logoBase64 = e.target.result;
+        //                 document.getElementById('newLogoBase64').value = logoBase64.split(',')[1]; // Only take the base64 part
+        //                 var previewElement = document.getElementById('logoPreview');
+        //                 previewElement.src = logoBase64; // Set the preview src to the new logo
+        //                 previewElement.style.display = 'block'; // Show the preview
+        //             };
+
+        //             reader.readAsDataURL(file); // Read the file as a data URL
+        //         } else {
+        //             // If no new file is selected, retain the existing logo
+        //             var existingLogoBase64 = document.getElementById('existingLogoBase64').value; // Get the existing logo base64 if any
+        //             if (existingLogoBase64) {
+        //                 document.getElementById('newLogoBase64').value = existingLogoBase64; // Keep the existing logo base64
+        //                 var previewElement = document.getElementById('logoPreview');
+        //                 previewElement.src = "data:image/png;base64," + existingLogoBase64; // Show existing logo
+        //                 previewElement.style.display = 'block'; // Ensure the preview is visible
+        //             }
+        //         }
+        //     });
+        // });
+
+    function onSelect(args) {
+        clearImage();
+        console.log(args);
+        if (args.filesData.length > 0) {
+            var file = args.filesData[0].rawFile;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var imgElement = document.getElementById('newLogo');
+                console.log(e.target.result);
+                console.log(imgElement);
+                imgElement.src = e.target.result;
+                imgElement.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function clearImage() {
+
+        var imgElement = document.getElementById('newLogo');
+        if (imgElement) {
+            imgElement.src = '';
+            imgElement.style.display = 'none';
+        }
+       
+    }
+  
+        // function onLogoChange(args) {
+        //     var files = args.fileList; // Get the list of uploaded files
+
+        //     // Check if a file has been selected
+        //     if (files.length > 0) {
+        //         var file = files[0]; // Get the first file
+        //         var reader = new FileReader();
+
+        //         // Read the file and show the preview
+        //         reader.onload = function (e) {
+        //             var logoBase64 = e.target.result;
+        //             document.getElementById('newLogoBase64').value = logoBase64.split(',')[1]; // Only take the base64 part
+        //             var previewElement = document.getElementById('logoPreview');
+        //             previewElement.src = logoBase64; // Set the preview src to the new logo
+        //             previewElement.style.display = 'block'; // Show the preview
+        //         };
+
+        //         reader.readAsDataURL(file); // Read the file as a data URL
+        //     } else {
+        //         // If no new file is selected, retain the existing logo
+        //         var existingLogoBase64 = document.getElementById('existingLogoBase64').value; // Get the existing logo base64 if any
+        //         if (existingLogoBase64) {
+        //             document.getElementById('newLogoBase64').value = existingLogoBase64; // Keep the existing logo base64
+        //             var previewElement = document.getElementById('logoPreview');
+        //             previewElement.src = "data:image/png;base64," + existingLogoBase64; // Show existing logo
+        //             previewElement.style.display = 'block'; // Ensure the preview is visible
+        //         }
+        //     }
+        // }
+
+   
+
+
+
+    function onfilterinOrg(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Name', 'startswith', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(ViewBag.ORG)), query);
+    }
+
+    function onOkButtonClick() {
+        // Close the dialog
+        this.hide();
+    }
+
+    // Yes button logic
+    function YesSubmit() {
+        // Proceed with form submission
+        document.getElementById("MyForm").submit(); // Manually submit the form
+        clearDialogDiv(); // Clear the dialog after action
+    }
+
+    // No button logic
+    function onNoButtonClick() {
+        clearDialogDiv(); // Clear the dialog without submitting the form
+    }
+
+    // Clear the dialog after closing
+    function clearDialogDiv() {
+        var dialogElement = document.getElementById('Dilog');
+        if (dialogElement) {
+            dialogElement.innerHTML = '';  // Clear the content inside the dialog
+        }
+    }
+
+
+</script>
+
+
+
+

@@ -1,0 +1,171 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = AdminPanel
+build_property.RootNamespace = AdminPanel
+build_property.ProjectDir = D:\opdandadmin\AdminPanel\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
+build_property.MSBuildProjectDirectory = D:\opdandadmin\AdminPanel
+build_property._RazorSourceGeneratorDebug = 
+
+[D:/opdandadmin/AdminPanel/Views/DynamicSidebar/DemoSidebar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRHluYW1pY1NpZGViYXJcRGVtb1NpZGViYXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/EmployeeMaster/Employee_Accounts.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVNYXN0ZXJcRW1wbG95ZWVfQWNjb3VudHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/EmployeeMaster/Employee_Documents.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVNYXN0ZXJcRW1wbG95ZWVfRG9jdW1lbnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/EmployeeMaster/Employee_Family_Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVNYXN0ZXJcRW1wbG95ZWVfRmFtaWx5X0RldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/EmployeeMaster/Employee_Form.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVNYXN0ZXJcRW1wbG95ZWVfRm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/EmployeeMaster/Employee_List.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVNYXN0ZXJcRW1wbG95ZWVfTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/EmployeeMaster/Employee_Personal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVNYXN0ZXJcRW1wbG95ZWVfUGVyc29uYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/EmployeeMaster/Employee_Professional.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVNYXN0ZXJcRW1wbG95ZWVfUHJvZmVzc2lvbmFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/ExceptionLog/ExceptionLogList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhjZXB0aW9uTG9nXEV4Y2VwdGlvbkxvZ0xpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Login/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Login/Reset_Password.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cUmVzZXRfUGFzc3dvcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/MasterDashboard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzdGVyRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/MenuMaster/MenuForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudU1hc3RlclxNZW51Rm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/MenuMaster/MenuList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudU1hc3RlclxNZW51TGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/MenuMaster/SaveIcon.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudU1hc3RlclxTYXZlSWNvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Organization/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JnYW5pemF0aW9uXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Organization/logo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JnYW5pemF0aW9uXGxvZ28uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Organization/LogoList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JnYW5pemF0aW9uXExvZ29MaXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Organization/OrganizationList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JnYW5pemF0aW9uXE9yZ2FuaXphdGlvbkxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Organization/Orglicence.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JnYW5pemF0aW9uXE9yZ2xpY2VuY2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/RoleMaster/RoleForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZU1hc3RlclxSb2xlRm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/RoleMaster/RoleList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZU1hc3RlclxSb2xlTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/RoleMenuMapping/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZU1lbnVNYXBwaW5nXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/RoleMenuMapping/RMM_Form.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZU1lbnVNYXBwaW5nXFJNTV9Gb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Shared/Expire_Link.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEV4cGlyZV9MaW5rLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Shared/Login_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXExvZ2luX0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Shared/Reset_Password_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFJlc2V0X1Bhc3N3b3JkX0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Shared/SideBar_PartialView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFNpZGVCYXJfUGFydGlhbFZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/UserMaster/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlck1hc3RlclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/UserMaster/UserList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlck1hc3RlclxVc2VyTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/UserRoleMapping/URM_Form.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclJvbGVNYXBwaW5nXFVSTV9Gb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/opdandadmin/AdminPanel/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-cxfutip2kg

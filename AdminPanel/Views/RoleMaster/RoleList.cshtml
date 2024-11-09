@@ -1,0 +1,323 @@
+﻿@using Syncfusion.EJ2
+@addTagHelper *, Syncfusion.EJ2
+@{
+    ViewData["Title"] = "Rolelist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@{
+    List<object> GridCommands = new List<object>();
+
+    GridCommands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit btnEdit", cssClass = "e-flat" } });
+
+    GridCommands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete btnDelete", cssClass = "e-flat" } });
+}
+
+
+@{
+    string o = TempData["Output"] as string;
+    bool showToast = !string.IsNullOrEmpty(o);
+    string toastClass = string.Empty;
+
+    if (showToast)
+    {
+
+
+
+        if (o.Contains("Error"))
+        {
+            toastClass = "bg-danger";
+        }
+        else
+        {
+            toastClass = "bg-success";
+        }
+    }
+}
+
+<style>
+    .bg-success {
+        background-color: #28a745 !important;
+        color: white;
+    }
+
+
+    .bg-danger {
+        background-color: #dc3545 !important;
+        color: white;
+    }
+</style>
+
+
+
+@if (showToast)
+{
+    <ejs-toast id="element" cssClass="@toastClass" content="@o"></ejs-toast>
+}
+
+
+
+
+
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                Role List
+            </h4>
+        </div>
+    </div>
+</div>
+
+<div id="Dilog" class="w-25"></div>
+<div class="container-fluid mt-2 ">
+
+    @* //dataSource="@ViewBag.OrgData" *@
+    <ejs-grid id="Grid" dataSource="@ViewBag.RoleList" allowSorting="true" allowPaging="true" allowResizing="true" allowExcelExport="true" toolbar="@(new List<string>() {"Search","CustomButton"  })" queryCellInfo="onQueryCellInfo">
+        <e-grid-editsettings></e-grid-editsettings>
+        <e-grid-pageSettings pageSize="5" pageSizes="true" />
+        <e-grid-columns>
+            <e-grid-column headerText="Option" width="105" commands="GridCommands"></e-grid-column>
+            <e-grid-column field="Code" visible=false isPrimaryKey="true" headerText="Code" textAlign="Right" width="105"></e-grid-column>
+            <e-grid-column field="OrgCode" headerText="OrgName" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="RoleName" headerText="RoleName" width="200" textAlign="Left"></e-grid-column>
+            <e-grid-column field="RoleDescription" width="150" headerText="Description" textAlign="Left"></e-grid-column>
+            @* <e-grid-column field="CreatedBy" width="150" headerText="CreatedBy" textAlign="Center"></e-grid-column>
+            <e-grid-column field="creationdate" width="150" headerText="Created On" textAlign="Center"></e-grid-column>
+            <e-grid-column field="LastModifiedBy" width="150" headerText="LastModifiedBy" textAlign="Center"></e-grid-column>
+            <e-grid-column field="LastModificationDate" width="150" headerText="LastModification Date" textAlign="Center"></e-grid-column> *@
+            <e-grid-column field="Status" width="150" headerText="Status" textAlign="Center"></e-grid-column>
+            <e-grid-column field="isChecker" width="150" headerText="isChecker" textAlign="Center"></e-grid-column>
+        </e-grid-columns>
+
+    </ejs-grid>
+
+</div>
+
+<script>
+    // JavaScript function to handle the QueryCellInfo event
+    function onQueryCellInfo(args) {
+        // if (args.column.field === "Status") {
+        //     if (args.data.Status === "A") {
+        //         alert();
+        //         args.cell.style.color = "red";
+        //         args.cell.style.backgroundColor = "lightgreen"; // Set text color to green for status "A"
+        //     } else if (args.data.Status === "L") {
+        //         args.cell.style.color = "red"; // Set text color to red for status "D"
+        //     }
+        // }
+    }
+</script>
+
+<script>
+
+
+    //For Toaster---
+    document.addEventListener('DOMContentLoaded', function () {
+        var showToast = @showToast.ToString().ToLower();
+
+        if (showToast) {
+            var toastObj = document.getElementById('element').ej2_instances[0];
+
+            // Set the toaster position to top-right
+            toastObj.position = {
+                X: 'Right',
+                Y: 'Top'
+            };
+
+            toastObj.show();
+        }
+    });
+
+
+
+    $(document).ready(function () {
+        var pid = null;
+        var spanElement = $('<span class="e-btn-icon e-add e-icons e-icon-left "></span>');
+
+        $(".e-tbar-btn-text").text("Add New");
+
+        $("#Grid_CustomButton").prepend(spanElement);
+
+
+        $("#Grid_CustomButton").on("click", function () {
+
+            // Call your function here
+            window.location.href = '@Url.Action("RoleForm", "RoleMaster")';
+        });
+    });
+
+    // Handle Edit and Deletea
+    function handleEditCommand(rowData) {
+
+        // Example: Implement logic to handle edit command
+        var grid = document.getElementById("Grid").ej2_instances[0];
+        var data = grid.getRowObjectFromUID(rowData).data;
+
+        var id = data.Code;
+
+
+        window.location.href = '@Url.Action("RoleForm", "RoleMaster")' + '?id=' + id;
+
+        // $.ajax({
+        //     "url": '@Url.Action("GetCitybyid", "City")',
+        //     method: "GET",
+        //     data: { id: id },
+        //     dataType: 'json',
+        //     success: function (data) {
+
+
+        //         var redirectUrlWithId = data.redirectUrl + '?id=' + id;
+        //               window.location.href = redirectUrlWithId;
+
+        //     },
+        //     error: function (err) {
+        //         console.log("error: " + err)
+        //     }
+
+        // })
+    }
+
+    //delete Functionality sss---------------------------------
+
+    var dialog = new ej.popups.Dialog({
+        header: 'Confirm Delete',
+        content: '<div>Are you sure you want to delete this record?</div>',
+        buttons: [
+            { buttonModel: { content: 'Yes', isPrimary: true }, click: onYesButtonClick, id: 'confirmDelete' },
+            { buttonModel: { content: 'No' }, click: onNoButtonClick, id: 'cancelDelete' }
+        ]
+
+    });
+
+
+
+    function clearDialogDiv() {
+        var dialogDiv = document.getElementById("Dilog");
+        if (dialogDiv) {
+            while (dialogDiv.firstChild) {
+                dialogDiv.removeChild(dialogDiv.firstChild);
+            }
+        }
+    }
+
+
+    function onNoButtonClick() {
+        dialog.hide()
+        clearDialogDiv();
+        var popup = document.getElementById('Dilog');
+        console.log(popup);
+        var popupElement = popup.querySelector('w-25.e-control.e-popup.e-popup-.e-dialog');
+        console.log(popupElement);
+        if (popupElement) {
+            alert("ggg");
+            popup.removeChild(popupElement);
+        }
+    }
+
+    function onYesButtonClick() {
+
+
+        clearDialogDiv();
+        console.log("Yes button clicked", id)
+        if (id > 0) {
+            $.ajax({
+                "url": '@Url.Action("DeleteRole", "RoleMaster")',
+                method: "GET",
+                data: { Id: id },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if (data = true) {
+                        GetRoleMaster();
+                    }
+
+                },
+                error: function (err) {
+                    console.log("error: " + err)
+                }
+
+            })
+        }
+        id = 0;
+
+
+        //Call Delete Ajax
+    }
+
+    function GetRoleMaster() {
+        $.ajax({
+            "url": '@Url.Action("GetAllRoleFor_Ajax", "RoleMaster")',
+            method: "GET",
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                if (data != null) {
+                    var grid = document.getElementById('Grid').ej2_instances[0];
+                    if (grid) {
+
+                        grid.dataSource = data;
+                        window.location.reload();
+                        // grid.refresh();
+                    } else {
+                        console.log("Grid instance not found");
+                    }
+                }
+
+            },
+            error: function (err) {
+                console.log("error: " + err)
+            }
+
+        })
+
+    }
+
+
+
+    function handleDeleteCommand(rowData) {
+        clearDialogDiv();
+        var grid = document.getElementById("Grid").ej2_instances[0];
+        dialog.appendTo('#Dilog');
+        var data = grid.getRowObjectFromUID(rowData).data;
+        console.log("Delete command clicked", data.code);
+        id = data.Code;
+        console.log(id);
+        if (dialog) {
+            dialog.show(); // Show the dialog
+        }
+
+    }
+
+
+
+
+    //Event when user Click On Edit or Delete Option Starts
+    document.body.addEventListener("click", function (event) {
+        var target = event.target;
+        if (target.classList.contains("e-editbutton") || target.classList.contains("btnEdit")) {
+            var rowData = target.closest("tr").getAttribute("data-uid");
+            console.log(rowData);
+
+            handleEditCommand(rowData);
+        } else if (target.classList.contains("e-deletebutton") || target.classList.contains("btnDelete")) {
+
+            var rowData = target.closest("tr").getAttribute("data-uid");
+            console.log("Rowdata" + rowData);
+            handleDeleteCommand(rowData);
+        }
+    });
+
+
+
+
+
+
+
+</script>
+

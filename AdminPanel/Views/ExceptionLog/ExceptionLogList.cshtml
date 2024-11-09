@@ -1,0 +1,156 @@
+﻿@using Syncfusion.EJ2
+@addTagHelper *, Syncfusion.EJ2
+@{
+    ViewData["Title"] = "ExceptionLogList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                Exception Log List
+            </h4>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div id="Dilog" class="w-25"></div>
+<div class="container-fluid mt-2 ">
+
+    @* //dataSource="@ViewBag.OrgData" *@
+    <ejs-grid id="Grid" dataSource="@ViewBag.ExceptionLogList" allowSorting="true" allowPaging="true" allowResizing="true" allowExcelExport="true">
+        <e-grid-editsettings></e-grid-editsettings>
+        <e-grid-pageSettings pageSize="5" />
+        <e-grid-columns>
+
+
+            <e-grid-column field="ErrorDate" width="150" headerText="Error Date"></e-grid-column>
+            <e-grid-column field="ControllerName" width="150" headerText="Controller Name"></e-grid-column>
+            <e-grid-column field="ErrorMessage" width="150" headerText="Error Message"></e-grid-column>
+
+
+
+        </e-grid-columns>
+
+    </ejs-grid>
+
+</div>
+
+
+<script>
+
+
+    // Handle Edit and Deletea
+    function handleEditCommand(rowData) {
+
+        // Example: Implement logic to handle edit command
+        var grid = document.getElementById("Grid").ej2_instances[0];
+        var data = grid.getRowObjectFromUID(rowData).data;
+
+        var id = data.UserID;
+
+        console.log(id);
+        window.location.href = '@Url.Action("Index", "UserMaster")' + '?id=' + id;
+
+
+    }
+
+    //delete Functionality sss---------------------------------
+
+    var dialog = new ej.popups.Dialog({
+        header: 'Confirm Delete',
+        content: '<div>Are you sure you want to delete this record?</div>',
+        buttons: [
+            { buttonModel: { content: 'Yes', isPrimary: true }, click: onYesButtonClick, id: 'confirmDelete' },
+            { buttonModel: { content: 'No' }, click: onNoButtonClick, id: 'cancelDelete' }
+        ]
+
+    });
+
+
+
+    function clearDialogDiv() {
+        var dialogDiv = document.getElementById("Dilog");
+        if (dialogDiv) {
+            while (dialogDiv.firstChild) {
+                dialogDiv.removeChild(dialogDiv.firstChild);
+            }
+        }
+    }
+
+
+    function onNoButtonClick() {
+        dialog.hide()
+        clearDialogDiv();
+        var popup = document.getElementById('Dilog');
+        console.log(popup);
+        var popupElement = popup.querySelector('w-25.e-control.e-popup.e-popup-.e-dialog');
+        console.log(popupElement);
+        if (popupElement) {
+            alert("ggg");
+            popup.removeChild(popupElement);
+        }
+    }
+
+    function onYesButtonClick() {
+
+        clearDialogDiv();
+        console.log("Yes button clicked", id)
+
+        id = 0;
+
+        var grid = document.getElementById('Grid').ej2_instances[0];
+        grid.refresh();
+        //Call Delete Ajax
+    }
+
+
+
+
+    function handleDeleteCommand(rowData) {
+        var grid = document.getElementById("Grid").ej2_instances[0];
+        dialog.appendTo('#Dilog');
+        var data = grid.getRowObjectFromUID(rowData).data;
+        console.log("Delete command clicked", data.id);
+        id = data.id;
+        console.log(id);
+        if (dialog) {
+            dialog.show(); // Show the dialog
+        }
+
+    }
+
+
+
+
+    //Event when user Click On Edit or Delete Option Starts
+    document.body.addEventListener("click", function (event) {
+        var target = event.target;
+        if (target.classList.contains("e-editbutton") || target.classList.contains("btnEdit")) {
+            var rowData = target.closest("tr").getAttribute("data-uid");
+            console.log(rowData);
+
+            handleEditCommand(rowData);
+        } else if (target.classList.contains("e-deletebutton") || target.classList.contains("btnDelete")) {
+
+            var rowData = target.closest("tr").getAttribute("data-uid");
+            handleDeleteCommand(rowData);
+        }
+    });
+
+
+
+
+
+
+
+</script>
+
+
+

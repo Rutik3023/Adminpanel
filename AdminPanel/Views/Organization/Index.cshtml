@@ -1,0 +1,452 @@
+﻿@model   AdminPanel.Models.Organization_model
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var data = new string[] { "ACTIVE", "DELETED", "LOCKED" };
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">ORGANIZATION MASTER</h4>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card rounded shadow-sm">
+                <div class="card-body">
+                    <form asp-action="Index" method="post" enctype="multipart/form-data" id="myForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+
+                            <div class="col-lg-3 col-md-6 col-sm-12" style="display:none">
+                                <ejs-textbox id="Sys_Code" placeholder="Id" ejs-for="@Model.Sys_Code"></ejs-textbox>
+                                <span asp-validation-for="Sys_Code" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-textbox id="Organization_Name" maxlength="100" placeholder="Name *" floatLabelType="Auto" ejs-for="@Model.Organization_Name"></ejs-textbox>
+                                <span asp-validation-for="Organization_Name" class="text-danger"></span>
+                            </div>
+
+                           
+
+                                <div class="col-lg-3 col-md-6 col-sm-12">
+                                    <ejs-textbox id="Organization_Code" maxlength="50" placeholder="Code *" floatLabelType="Auto" ejs-for="@Model.Organization_Code"></ejs-textbox>
+                                    <span asp-validation-for="Organization_Code" class="text-danger"></span>
+                                </div>
+
+                          
+                            
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-textarea id="Address" maxlength="100" placeholder="Address *" rows="1" floatLabelType="Auto" ejs-for="@Model.Address"></ejs-textarea>
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-dropdownlist id="CountryId" floatLabelType=Auto placeholder="Country *" filterBarPlaceholder="Search" ejs-for="@Model.CountryId" allowFiltering="true" filtering="onfilteringCountry" change="OnCountryDropdownChange" dataSource="@ViewBag.country">
+                                    <e-dropdownlist-fields text="Name" value="Sys_Code"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+
+                                <ejs-dropdownlist id="StateId" floatLabelType=Auto placeholder="State *" ejs-for="@Model.StateId" filterBarPlaceholder="Search" allowFiltering="true" filtering="onfilteringState" change="OnStateDropdownChange" dataSource="@ViewBag.State">
+                                    <e-dropdownlist-fields text="text" value="value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+
+                            </div>
+
+
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-dropdownlist id="CityId" floatLabelType=Auto placeholder="City *" filterBarPlaceholder="Search" ejs-for="CityId" allowFiltering="true" filtering="onfiltering" dataSource="@ViewBag.city">
+                                    <e-dropdownlist-fields text="text" value="value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-dropdownlist id="CurrencyId" floatLabelType=Auto placeholder="Currency *" filterBarPlaceholder="Search" ejs-for="CurrencyId" allowFiltering="true" filtering="onfiltering" dataSource="@ViewBag.Currency">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-textbox id="PinCode" maxlength="20" placeholder="Pin/Zip Code *" floatLabelType="Auto" ejs-for="@Model.PinCode"></ejs-textbox>
+                                <span asp-validation-for="PinCode" class="text-danger"></span>
+                            </div>
+
+
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-textbox id="Contact_Person_Name" maxlength="100" placeholder="Contact Person Name *" floatLabelType="Auto" ejs-for="@Model.Contact_Person_Name"></ejs-textbox>
+                                <span asp-validation-for="Contact_Person_Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-textbox id="Contact_Person_No" maxlength="15" placeholder="Contact Person No *" floatLabelType="Auto" ejs-for="@Model.Contact_Person_No"></ejs-textbox>
+                                <span asp-validation-for="Contact_Person_No" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-textbox id="Telephone_No" maxlength="15" placeholder="Telephone No *" floatLabelType="Auto" ejs-for="@Model.Telephone_No"></ejs-textbox>
+                                <span asp-validation-for="Telephone_No" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-textbox id="Email" maxlength="100" placeholder="Email *" floatLabelType="Auto" ejs-for="@Model.Email"></ejs-textbox>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            @*  <div class="col-4 p-3">
+                            <ejs-textbox id="Password" placeholder="Password *" floatLabelType="Auto" ejs-for="@Model.Password"></ejs-textbox>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            </div> *@
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-textbox id="GSTNO" maxlength="15" placeholder="GST No *" floatLabelType="Auto" ejs-for="@Model.GSTNO"></ejs-textbox>
+                                <span asp-validation-for="GSTNO" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-textbox id="PANNO" maxlength="10" placeholder="PAN No *" floatLabelType="Auto" ejs-for="@Model.PANNO"></ejs-textbox>
+                                <span asp-validation-for="PANNO" class="text-danger"></span>
+                            </div>
+
+
+
+
+
+                            @*       <div class="col-4 mt-1 p-3" >
+                            <label for="Logo" class="w-50 text-secondary" style="font-size:13px">Add Logo*</label>
+                            <ejs-uploader id="Logo" name="Logo" async-settings="@{
+                            new Syncfusion.EJ2.Inputs.UploaderAsyncSettings { SaveUrl = "General/Organization/Save", RemoveUrl = "/Organization/Remove" };
+                            }"
+                            style="flex: 1;">
+                            </ejs-uploader>
+
+                            </div> *@
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-dropdownlist id="Status" floatLabelType=Auto placeholder="Status *" filterBarPlaceholder="Search" ejs-for="@Model.Status" dataSource="@ViewBag.Status" allowFiltering="true">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+
+
+                                <ejs-checkbox id="is_Ocean" name="is_Ocean" label="isOcean" ejs-for="is_Ocean" cssClass="p-3"></ejs-checkbox>
+
+                                <ejs-checkbox id="is_Land" name="is_Land" label="isLand" ejs-for="is_Land" cssClass="p-3"></ejs-checkbox>
+
+                                <ejs-checkbox id="is_Air" name="is_Air" label="isAir" ejs-for="is_Air" cssClass="p-3"></ejs-checkbox><br />
+                                <span class="error-message " id="checkErr" style="font-size:13px;color:#f44336"></span>
+                            </div>
+                            @*   <span asp-validation-for="Logo" class="text-danger"></span> *@
+
+
+                            <div class="form-group p-3 text-end">
+                                <ejs-button typeof="submit" cssClass="text-light cust-btn" id="submitBtn" content="Submit"></ejs-button>
+                                <a asp-action="OrganizationList" Class="e-btn bg-light text-dark">Back</a>
+                            </div>
+
+                          
+
+
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+
+
+    // $(document).ready(function () {
+
+    //     $('#CountryId_hidden').change(function () {
+    //         alert("ggg")
+    //         var selectedValue = $(this).val();
+    //         console.log("Selected value: " + selectedValue);
+
+    //         if (selectedValue != null && selectedValue != "") {
+    //             $.ajax({
+    //                 url: '@Url.Action("GetStateByCode", "State")',
+    //                 type: "GET",
+    //                 data: { Code: selectedValue },
+    //                 dataType: 'json',
+    //                 success: function (data) {
+    //                     console.log(data);
+    //                     if (data != null) {
+    //                         var dropdown = document.getElementById('StateId').ej2_instances[0];
+    //                         dropdown.dataSource = data;
+    //                         dropdown.dataBind();
+    //                     }
+
+    //                 },
+    //                 error: function (errMsg) { }
+
+    //             });
+    //         }
+    //         // You can use the selectedValue variable for further processing
+    //     });
+
+    //     // $('#triggerButton').click(function () {
+    //     //     $('#stateDropdown').trigger('change');
+    //     // });
+    // });
+
+
+
+
+    function validateCheckboxes(event) {
+        var isOceanChecked = document.getElementById("is_Ocean").checked;
+        var isLandChecked = document.getElementById("is_Land").checked;
+        var isAirChecked = document.getElementById("is_Air").checked;
+
+        if (!isOceanChecked && !isLandChecked && !isAirChecked) {
+            var errorMessages = document.getElementById('checkErr');
+            errorMessages.textContent = "Please select at least one option.";
+            // for (var i = 0; i < errorMessages.length; i++) {
+            //     errorMessages[i].textContent = "Please select at least one option.";
+            // }
+            event.preventDefault();
+        }
+    }
+
+
+    $(document).ready(function () {
+
+
+        // Check if Sys_Code has a value
+        var sysCode = $("#Sys_Code").val();
+        if (sysCode != null & sysCode!="") {
+           
+            // Make Organization_Code read-only
+            $("#Organization_Code").prop("readonly", true);
+        }
+
+
+
+        var options = {
+            rules: {
+
+                'Organization_Name': {
+                    required: [true, "Please Enter Organization Name"], regex: ['^[A-Za-z ]+$', "Please enter valid Organization Name"]
+                },
+                'Organization_Code': { required: [true, "Please Enter Organization Code"], regex: [/^[a-zA-Z0-9]+$/, "Special characters are not allowed in Organization Code"] },
+                'Address': { required: [true, "Please Enter Address"] },
+                'CountryId': { required: [true, "Please Select Country"] },
+                'CityId': { required: [true, "Please Select City"] },
+                'StateId': { required: [true, "Please Enter State"] },
+                'PinCode': { required: [true, "Please Select Pin_ZipCode"], regex: "^[1-9][0-9]{5}$" },
+                'Contact_Person_Name': { required: [true, "Please Select Contact Person Name"], regex: ['^[A-Za-z ]+$', "Please enter valid Contact Person Name"] },
+                'Contact_Person_No': { required: [true, "Please Select Contact Person No."], regex: /^[0-9]{10}$/ },
+                'Telephone_No': {
+                    required: [true, "Please Select Telephone No."], regex: [/^0\d{10}$/ , "Please enter valid telephone number."]
+                },
+                'Email': { required: [true, "Please Select Email"], email: [true, "Please Enter Valid Email Id"] },
+                'GSTNO': { required: [true, "Please Select GST No."], regex: "^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}[A-Z][A-Z0-9]{1}$" },
+                'PANNO': { required: [true, "Please Select PAN No."], regex: "^[A-Z]{5}[0-9]{4}[A-Z]$" },
+                'Status': { required: [true, "Please Select Status"] }
+                // 'Logo': { required: [true, "Please Select Logo"] },
+                // 'is_Ocean': { required: true },
+                // 'is_Land': { required: true },
+                // 'is_Air': { required: true }
+
+
+            },
+            errorPlacement: function (error, element) {
+                var errorId = element.id + 'Error';
+                var errorSpan = document.getElementById(errorId);
+                if (errorSpan) {
+                    errorSpan.textContent = error.textContent;
+                }
+            }
+
+        };
+
+
+        var saveButton = document.getElementById('submitBtn');
+        var formObject = new ej.inputs.FormValidator('#myForm');
+
+        formObject.rules = options.rules;
+        // Places error label outside the TextBox using the customPlacement event of FormValidator
+        formObject.customPlacement = function (element, errorElement) {
+            console.log(element.parentElement);
+            if (element.parentElement && element.parentElement.parentElement) {
+
+                element.parentElement.parentElement.appendChild(errorElement);
+            }
+        };
+
+
+
+        // Add event listener for click event
+        saveButton.addEventListener('click', function (event) {
+
+
+            var IsValid = formObject.validate();
+            if (IsValid) {
+
+
+            } else {
+
+                event.preventDefault();
+
+            }
+
+            // AddUser(event);
+            validateCheckboxes(event);
+        });
+
+    })
+
+
+
+
+
+    function OnCountryDropdownChange(args) {
+
+        var selectedValue = $('#CountryId_hidden').val();
+        console.log("Selected value: " + selectedValue);
+        if (selectedValue != null && selectedValue != "") {
+            $.ajax({
+                url: '@Url.Action("GetStateByCode", "State")',
+                type: "GET",
+                data: { Code: selectedValue },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if (data != null) {
+                        var dropdown = document.getElementById('StateId').ej2_instances[0];
+                        dropdown.dataSource = data;
+                        dropdown.dataBind();
+                    }
+
+                },
+                error: function (errMsg) { }
+
+            });
+        }
+        // You can use the selectedValue variable for further processing
+    }
+
+    function OnStateDropdownChange(args) {
+        var selectedValue = $('#StateId_hidden').val();
+        //         console.log("Selected value: " + selectedValue);
+
+        console.log("Selected value: " + selectedValue);
+        if (selectedValue != null && selectedValue != "") {
+            $.ajax({
+                url: '@Url.Action("GetCityByState", "City")',
+                type: "GET",
+                data: { Code: selectedValue },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if (data != null) {
+                        var dropdown = document.getElementById('CityId').ej2_instances[0];
+                        dropdown.dataSource = data;
+                        dropdown.dataBind();
+                    }
+
+                },
+                error: function (errMsg) { }
+
+            });
+        }
+
+    }
+
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     // Get reference to the Syncfusion button element
+
+    // });
+
+    // Function to be called when the button is clicked
+    function AddUser(event) {
+
+        console.log(options);
+
+        // Your logic here
+
+
+
+
+
+        // Perform any other actions you need
+    }
+
+
+
+
+
+
+
+
+
+
+
+    function onfilteringState(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('text', 'startswith', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.State)), query);
+    }
+
+
+    function onfiltering(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('text', 'startswith', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.city)), query);
+    }
+
+    function onfilteringCountry(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Name', 'startswith', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.country)), query);
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

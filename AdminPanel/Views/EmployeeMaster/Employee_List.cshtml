@@ -1,0 +1,266 @@
+﻿@using Syncfusion.EJ2
+@addTagHelper *, Syncfusion.EJ2
+@{
+    ViewData["Title"] = "Employeelist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                Employee List
+            </h4>
+        </div>
+    </div>
+</div>
+
+@{
+    List<object> GridCommands = new List<object>();
+
+    GridCommands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit btnEdit", cssClass = "e-flat" } });
+
+    GridCommands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete btnDelete", cssClass = "e-flat" } });
+}
+
+
+@{
+    string o = TempData["Output"] as string;
+    bool showToast = !string.IsNullOrEmpty(o);
+    string toastClass = string.Empty;
+
+    if (showToast)
+    {
+
+        if (o.Contains("Error"))
+        {
+            toastClass = "bg-danger";
+        }
+        else
+        {
+            toastClass = "bg-success";
+        }
+    }
+}
+
+<style>
+    .bg-success {
+        background-color: #28a745 !important;
+        color: white;
+    }
+
+
+    .bg-danger {
+        background-color: #dc3545 !important;
+        color: white;
+    }
+</style>
+
+
+
+@if (showToast)
+{
+    <ejs-toast id="element" cssClass="@toastClass" content="@o"></ejs-toast>
+}
+
+
+
+
+<div id="Dilog" class="w-25"></div>
+<div class="container-fluid mt-2 ">
+
+    @* //dataSource="@ViewBag.OrgData" *@
+    <ejs-grid id="Grid" dataSource="@ViewBag.EmployeeList" allowSorting="true" allowPaging="true" allowResizing="true" allowExcelExport="true" toolbar="@(new List<string>() {"Search","CustomButton"  })">
+        <e-grid-editsettings></e-grid-editsettings>
+        <e-grid-pageSettings pageSize="5" pageSizes="true" />
+        <e-grid-columns>
+            <e-grid-column headerText="Option" width="105" commands="GridCommands"></e-grid-column>
+            <e-grid-column field="Sys_Code" isPrimaryKey="true" visible="false" headerText="Sys Code" width="105" textAlign="Right"></e-grid-column>
+            <e-grid-column field="EmployeeCode" headerText="Employee Code" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="OrgCode" headerText="Org Code" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="First_Name" headerText="First Name" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="Middle_Name" headerText="Middle Name" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="Last_Name" headerText="Last Name" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="Emp_Status" headerText="Emp Status" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="Salesmen" headerText="Salesmen" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="Co_Email_ID" headerText="Email ID" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="Mobile_No" headerText="Mobile No" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="Reason_for_Resignation" headerText="Reason for Resignation" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="Emp_photoCode" headerText="Photo Code" textAlign="Left" width="150"></e-grid-column>
+            <e-grid-column field="Status" headerText="Status" textAlign="Center" width="150"></e-grid-column>
+            @* <e-grid-column field="Sys_Created_By" headerText="Created By" textAlign="Center" width="150"></e-grid-column>
+            <e-grid-column field="Sys_Created_On" headerText="Created On" textAlign="Center" width="150"></e-grid-column>
+            <e-grid-column field="Sys_Modified_By" headerText="Modified By" textAlign="Center" width="150"></e-grid-column>
+            <e-grid-column field="Sys_Modified_On" headerText="Modified On" textAlign="Center" width="150"></e-grid-column> *@
+        </e-grid-columns>
+
+    </ejs-grid>
+
+</div>
+
+
+<script>
+
+
+    //For Toaster---
+    document.addEventListener('DOMContentLoaded', function () {
+        var showToast = @showToast.ToString().ToLower();
+
+        if (showToast) {
+            var toastObj = document.getElementById('element').ej2_instances[0];
+
+            // Set the toaster position to top-right
+            toastObj.position = {
+                X: 'Right',
+                Y: 'Top'
+            };
+
+            toastObj.show();
+        }
+    });
+
+    var id;
+
+
+    $(document).ready(function () {
+
+        var spanElement = $('<span class="e-btn-icon e-add e-icons e-icon-left "></span>');
+
+        $(".e-tbar-btn-text").text("Add New");
+
+        $("#Grid_CustomButton").prepend(spanElement);
+
+
+        $("#Grid_CustomButton").on("click", function () {
+
+
+            window.location.href = '@Url.Action("Employee_Form", "EmployeeMaster")';
+        });
+    });
+
+    // Handle Edit and Delete
+    function handleEditCommand(rowData) {
+
+        // Example: Implement logic to handle edit command
+        var grid = document.getElementById("Grid").ej2_instances[0];
+        var data = grid.getRowObjectFromUID(rowData).data;
+        console.log("Edit command clicked", data.Sys_Code);
+        var EditId = data.Sys_Code;
+        if (EditId != "") {
+            window.location.href = '@Url.Action("Employee_Form", "EmployeeMaster")' + '?Id=' + EditId;
+        }
+
+
+
+    }
+
+    //delete Functionality sss---------------------------------
+
+    var dialog = new ej.popups.Dialog({
+        header: 'Confirm Delete',
+        content: '<div>Are you sure you want to delete this record?</div>',
+        buttons: [
+            { buttonModel: { content: 'Yes', isPrimary: true }, click: onYesButtonClick, id: 'confirmDelete' },
+            { buttonModel: { content: 'No' }, click: onNoButtonClick, id: 'cancelDelete' }
+        ]
+
+    });
+
+
+    function clearDialogDiv() {
+        var dialogDiv = document.getElementById("Dilog");
+        if (dialogDiv) {
+            while (dialogDiv.firstChild) {
+                dialogDiv.removeChild(dialogDiv.firstChild);
+            }
+        }
+    }
+
+
+    function onNoButtonClick() {
+        dialog.hide()
+        clearDialogDiv();
+        var popup = document.getElementById('Dilog');
+        console.log(popup);
+        var popupElement = popup.querySelector('w-25.e-control.e-popup.e-popup-.e-dialog');
+        console.log(popupElement);
+        if (popupElement) {
+            alert("ggg");
+            popup.removeChild(popupElement);
+        }
+    }
+
+    function onYesButtonClick() {
+
+        clearDialogDiv();
+        console.log("Yes button clicked", id)
+
+        if (id != "" && id != null) {
+            $.ajax({
+                "url": '@Url.Action("Delete", "EmployeeMaster")',
+                method: "GET",
+                data: { Id: id },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if (data = true) {
+                        console.log(data.Staus);
+                        window.location.reload();
+                    }
+
+                },
+                error: function (err) {
+                    window.location.href = errorViewUrl;
+                    console.log("error: " + err)
+                }
+
+            })
+        }
+        id = 0;
+        //Call Delete Ajax
+        id = 0;
+
+        var grid = document.getElementById('Grid').ej2_instances[0];
+        grid.refresh();
+
+    }
+
+    function handleDeleteCommand(rowData) {
+        clearDialogDiv();
+        var grid = document.getElementById("Grid").ej2_instances[0];
+        dialog.appendTo('#Dilog');
+
+        var data = grid.getRowObjectFromUID(rowData).data;
+        console.log("Delete command clicked", data.Sys_Code);
+        id = data.Sys_Code;
+        console.log(id);
+        if (dialog) {
+            dialog.show(); // Show the dialog
+        }
+
+    }
+
+    //Event when user Click On Edit or Delete Option Starts
+    document.body.addEventListener("click", function (event) {
+        var target = event.target;
+        if (target.classList.contains("e-editbutton") || target.classList.contains("btnEdit")) {
+
+            var rowData = target.closest("tr").getAttribute("data-uid");
+            console.log(rowData);
+
+            handleEditCommand(rowData);
+        } else if (target.classList.contains("e-deletebutton") || target.classList.contains("btnDelete")) {
+
+            var rowData = target.closest("tr").getAttribute("data-uid");
+            handleDeleteCommand(rowData);
+        }
+    });
+
+
+
+
+
+</script>
+
+
+

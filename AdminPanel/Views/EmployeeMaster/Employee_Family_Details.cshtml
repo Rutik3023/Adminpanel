@@ -1,0 +1,476 @@
+﻿@{
+
+    List<object> GridCommands = new List<object>();
+
+    GridCommands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit btnEdit", cssClass = "e-flat" } });
+
+    GridCommands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete btnDelete", cssClass = "e-flat" } });
+
+}
+
+<div id="DilogFamilyDel" class="w-25 "></div>
+<div id="DilFMEmpMandate" class="w-25 "></div>
+<div id="DilSucess" class="w-25 "></div>
+<div class="container-fluid">
+    <form id="FamilyDetails_Form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+
+
+            <div class="card rounded">
+                <div class="card-body">
+                    <div class="row ">
+
+                        <div class="col-4" style="display:none">
+                            <ejs-textbox name="Family_Sys_Code" id="Family_Sys_Code" floatLabelType=Auto placeholder="Code"></ejs-textbox>
+                        </div>
+
+                        <div class=" col-4">
+                            <ejs-textbox id="Relationship_Type" maxlength="50" placeholder="Relationship Type*" floatLabelType=Auto></ejs-textbox>
+
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textbox id="Relationship_Name" maxlength="50" placeholder="Relationship_Name*" floatLabelType=Auto></ejs-textbox>
+
+                        </div>
+                        <div class=" col-4">
+                            <ejs-datepicker id="Relationship_Date_Of_Birth" placeholder="Relationship Date of Birth*" format="dd-MM-yyyy" floatLabelType=Auto></ejs-datepicker>
+
+                        </div>
+                        <div class="text-end me-5">
+                            <ejs-button type="button" cssClass="e-btn bg-success text-light" id="FamilyDetailsBtn" content="Add"></ejs-button>
+
+
+                        </div>
+
+
+
+                    </div>
+                    <br />
+
+                    <hr />
+
+                    <br />
+                    <div class="row">
+                        <div class="container-fluid mt-1 ">
+
+
+                            <ejs-grid id="FamilyGrid" dataSource="@ViewBag.GetFamilyDetails"  allowSorting="true" allowPaging="true" allowResizing="true" allowFiltering="true" allowExcelExport="true" toolbar="@(new List<string>() {"Search" 
+                                })">
+                                <e-grid-editsettings></e-grid-editsettings>
+                                <e-grid-filterSettings type="Excel"></e-grid-filterSettings>
+                                <e-grid-pageSettings pageSize="5" pageSizes="@(new string[] { "5", "10" ,"12","15","20", "All" })" />
+                                <e-grid-columns>
+                                    <e-grid-column headerText="Option" width="80" commands="GridCommands"></e-grid-column>
+                                    <e-grid-column field="Sys_Code" isPrimaryKey="true" headerText="Sr No." width="100" allowFiltering="false"></e-grid-column>
+                                    <e-grid-column field="Relationship_Type" headerText="Relationship_Type" width="150" allowFiltering="false"></e-grid-column>
+                                    <e-grid-column field="Relationship_Name" headerText="Relationship_Name" width="150" allowFiltering="false"></e-grid-column>
+                                    <e-grid-column field="Relationship_Date_Of_Birth" width="150" headerText="Relationship_Date_Of_Birth" allowFiltering="false"></e-grid-column>
+
+                                </e-grid-columns>
+                            </ejs-grid>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        var options = {
+            rules: {
+                'Relationship_Type': { required: [true, "Please enter relationship type"], regex: ['^[A-Za-z ]+$', "Please enter valid Name numeric value & special Character can not allowed"] },
+                'Relationship_Name': { required: [true, "Please enter relationship name"], regex: ['^[A-Za-z ]+$', "Please enter valid Name numeric value & special Character can not allowed"] },
+                'Relationship_Date_Of_Birth': { required: [true, "Please enter date of birth"] }
+            },
+            errorPlacement: function (error, element) {
+                var errorId = element.id + 'Error';
+                var errorSpan = document.getElementById(errorId);
+                if (errorSpan) {
+                    errorSpan.textContent = error.textContent;
+                }
+            }
+        };
+
+        var saveButton = document.getElementById('FamilyDetailsBtn');
+        var formObject = new ej.inputs.FormValidator('#FamilyDetails_Form');
+
+        formObject.rules = options.rules;
+        // Places error label outside the TextBox using the customPlacement event of FormValidator
+        formObject.customPlacement = function (element, errorElement) {
+            console.log(element.parentElement);
+            if (element.parentElement && element.parentElement.parentElement) {
+                element.parentElement.parentElement.appendChild(errorElement);
+            }
+        };
+
+        // Add event listener for click event
+        saveButton.addEventListener('click', function (event) {
+            var IsValid = formObject.validate();
+            if (IsValid) {
+                var syscodee = document.getElementById("Sys_Code").value;
+                var FamilySysCode = document.getElementById("Family_Sys_Code").value;
+                var RelationshipType = document.getElementById("Relationship_Type").value;
+                var RelationshipName = document.getElementById("Relationship_Name").value;
+                var Relationship_DateOfBirth = document.getElementById("Relationship_Date_Of_Birth").value;
+
+                var postDataFamilyDetails = {
+                    "Sys_Code": syscodee,
+                    "Family_Sys_Code": FamilySysCode,
+                    "Relationship_Type": RelationshipType,
+                    "Relationship_Name": RelationshipName,
+                    "Relationship_Date_Of_Birth": Relationship_DateOfBirth
+
+                }
+
+
+                console.log(postDataFamilyDetails);
+
+                var Sys_Code = document.getElementById("Sys_Code").ej2_instances[0].value;
+                if (Sys_Code == 0 || Sys_Code == null) {
+                    if (EmpMandatedialog) {
+                        clearDialogEmpMandate();
+                        EmpMandatedialog.appendTo('#DilFMEmpMandate');
+                        EmpMandatedialog.show();
+                    }
+                    
+
+                } else {
+                    $.ajax({
+                        url: '/HRM/EmployeeMaster/SaveFamilyDetails', // Replace with your action and controller
+                        type: 'POST',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(postDataFamilyDetails),
+                        success: function (response) {
+
+                            if (response != null) {
+
+
+                                console.log(response);
+
+
+                                $('#FamilyDetails_Form')[0].reset();
+
+
+                                var grid = document.getElementById("FamilyGrid").ej2_instances[0];
+                                grid.dataSource = response; // Correct camelCase spelling for dataSource
+                                grid.refresh();
+
+                            }
+
+
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle errors
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+         
+
+             
+
+
+
+
+            } else {
+                event.preventDefault();
+            }
+        });
+    });
+
+
+
+
+
+
+
+    // Handle Edit and Delete
+    function handleEdit_FamilyDetails(rowData) {
+
+        // Example: Implement logic to handle edit command
+        var grid = document.getElementById("FamilyGrid").ej2_instances[0];
+        var data = grid.getRowObjectFromUID(rowData).data;
+        console.log("Edit command clicked", data.sys_code);
+        var EditId = data.sys_code;
+        if (EditId > 0) {
+
+            console.log(EditId);
+            $.ajax({
+                url: '@Url.Action("Edit_Employee_Family_Details", "EmployeeMaster")',
+                method: 'GET',
+                data: { FamilySysCode: EditId },
+                success: function (data) {
+                    console.log(data);
+                    if (Array.isArray(data) && data.length > 0) {
+                        const firstElement = data[0];
+
+                        const sysCode = firstElement.sys_Code;
+                        const familySysCode = firstElement.family_Sys_Code;
+                        const relationshipType = firstElement.relationship_Type;
+                        const relationshipName = firstElement.relationship_Name;
+                        const relationshipDateOfBirth = firstElement.relationship_Date_Of_Birth;
+
+
+
+
+                        var FamilySysCode = document.getElementById("Family_Sys_Code").ej2_instances[0];
+
+                        var RelationshipType = document.getElementById("Relationship_Type").ej2_instances[0];
+
+                        var RelationshipName = document.getElementById("Relationship_Name").ej2_instances[0];
+
+                        var Relationship_DateOfBirth = document.getElementById("Relationship_Date_Of_Birth").ej2_instances[0];
+
+
+                        FamilySysCode.value = firstElement.family_Sys_Code;;
+                        RelationshipType.value = firstElement.relationship_Type;
+                        RelationshipName.value = firstElement.relationship_Name;
+                        Relationship_DateOfBirth.value = firstElement.relationship_Date_Of_Birth;
+
+
+
+
+
+                        // You can also use these values to update the DOM or perform other actions
+                    } else {
+                        console.error('No data received');
+                    }
+
+
+
+
+
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+
+        }
+
+
+
+    }
+
+
+    //Master Employer details Mandatory PopUp Starts--------------------------------
+
+    //Mandatory PopUp
+    var EmpMandatedialog = new ej.popups.Dialog({
+        header: 'Warning',
+        content: '<div>Please Fill Employee Details</div>',
+        buttons: [
+            { buttonModel: { content: 'Yes', isPrimary: true }, click: HideDialogEmpMandate }
+
+        ]
+
+    });
+
+
+    function HideDialogEmpMandate() {
+        console.log(EmpMandatedialog);
+        if (EmpMandatedialog) { clearDialogEmpMandate(); EmpMandatedialog.hide(); }
+        //
+
+    }
+
+    function clearDialogEmpMandate() {
+
+        var dialogDiv = document.getElementById("DilFMEmpMandate");
+        if (dialogDiv) {
+            while (dialogDiv.firstChild) {
+                dialogDiv.removeChild(dialogDiv.firstChild);
+            }
+        }
+    }
+
+
+
+
+    //Master Employer details Mandatory PopUp ends------------------------------
+
+
+
+
+    //delete Functionality sss---------------------------------
+
+   
+
+
+
+
+    var dialogForEnterSysCode = new ej.popups.Dialog({
+        header: 'Success',
+        content: '<div>Records Deleted SuccessFully</div>',
+        buttons: [
+            { buttonModel: { content: 'Ok', isPrimary: true }, click: closeFamilyDailog }
+
+        ]
+
+    });
+
+
+    function closeFamilyDailog() {
+        dialogForEnterSysCode.hide();
+    }
+
+
+    function clearDialogDiv() {
+        var dialogDiv = document.getElementById("DilSucess");
+        if (dialogDiv) {
+            while (dialogDiv.firstChild) {
+                dialogDiv.removeChild(dialogDiv.firstChild);
+            }
+        }
+    }
+
+
+    //---------------------------- Family Delete Dialog process starts 
+    var dialFamilydelete = new ej.popups.Dialog({
+        header: 'Confirm Delete',
+        content: '<div>Are you sure you want to delete this record?</div>',
+        buttons: [
+            { buttonModel: { content: 'Yes', isPrimary: true }, click: onYesdelfamilyClick, id: 'confirmDelete' },
+            { buttonModel: { content: 'No' }, click: onNodelfamilyClick, id: 'cancelDelete' }
+        ]
+
+    });
+
+    function clearDialdelfamily() {
+        var dialogDiv = document.getElementById("DilogFamilyDel");
+        if (dialogDiv) {
+            while (dialogDiv.firstChild) {
+                dialogDiv.removeChild(dialogDiv.firstChild);
+            }
+        }
+    }
+
+
+    function onNodelfamilyClick() {
+        dialFamilydelete.hide()
+        clearDialdelfamily();
+        var popup = document.getElementById('DilogForFamily');
+        console.log(popup);
+        var popupElement = popup.querySelector('w-25.e-control.e-popup.e-popup-.e-dialog');
+        console.log(popupElement);
+        if (popupElement) {
+            alert("ggg");
+            popup.removeChild(popupElement);
+        }
+    }
+
+    function onYesdelfamilyClick() {
+
+        clearDialdelfamily();
+        console.log("Yes button clicked", id)
+
+        if (id > 0) {
+            $.ajax({
+                "url": '@Url.Action("Delete_FamilyDetails", "EmployeeMaster")',
+                method: "GET",
+                data: { Sys_Code: id },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if (data != null) {
+                        var grid = document.getElementById('FamilyGrid').ej2_instances[0];
+                        if (grid) {
+                            grid.dataSource = data;
+                            grid.refresh();
+                            clearDialogDiv();
+                            dialogForEnterSysCode.appendTo('#DilSucess');
+                            dialogForEnterSysCode.show();
+                        }
+                    }
+
+                },
+                error: function (err) {
+                    console.log("error: " + err)
+                }
+
+            })
+        }
+        id = 0;
+
+      
+
+    }
+
+
+
+
+    function handledeleteEmpFamily(rowData) {
+        clearDialdelfamily();
+        var grid = document.getElementById("FamilyGrid").ej2_instances[0];
+        dialFamilydelete.appendTo('#DilogFamilyDel');
+
+        var data = grid.getRowObjectFromUID(rowData).data;
+        console.log("Delete command clicked", data.sys_code);
+        id = data.sys_code;
+        console.log(id);
+        if (dialog) {
+            dialog.show(); // Show the dialog
+        }
+
+    }
+
+    document.body.addEventListener("click", function (event) {
+        var target = event.target;
+
+        if (target.classList.contains("e-editbutton") || target.classList.contains("btnEdit")) {
+           
+            var row = target.closest("tr");
+            var grid = row.closest(".e-grid");
+            console.log("ggggg" + grid)
+            if (grid && grid.id === "FamilyGrid") {
+              
+                var rowData = row.getAttribute("data-uid");
+                handleEdit_FamilyDetails(rowData);
+                // Handle edit for GridMapping
+            }
+        } else if (target.classList.contains("e-deletebutton") || target.classList.contains("btnDelete")) {
+            var row = target.closest("tr");
+            console.log(row);
+            var grid = row.closest(".e-grid");
+            var rowData = row.getAttribute("data-uid");
+            console.log(rowData);
+
+
+            if (grid.id === "FamilyGrid") {
+
+                handledeleteEmpFamily(rowData);
+            }
+        }
+    });
+
+   
+    //Event when user Click On Edit or Delete Option Starts
+    // document.body.addEventListener("click", function (event) {
+    //     var target = event.target;
+    //     if (target.classList.contains("e-editbutton") || target.classList.contains("btnEdit")) {
+
+    //         var rowData = target.closest("tr").getAttribute("data-uid");
+    //         console.log(rowData);
+
+    //         handleEditCommand(rowData);
+    //     } else if (target.classList.contains("e-deletebutton") || target.classList.contains("btnDelete")) {
+
+    //         var rowData = target.closest("tr").getAttribute("data-uid");
+    //         handleDeleteCommand(rowData);
+    //     }
+    // });
+
+</script>

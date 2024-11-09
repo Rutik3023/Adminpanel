@@ -1,0 +1,42 @@
+﻿body {
+    background: #E7ECF1;
+}
+.page-wrapper {
+    position: relative;
+}
+.login-card {
+    max-width: 400px;
+    margin:0px auto;
+    border-radius:15px;
+}
+.bg-bakground {
+    background: url(../img/busy-shipping-port-with-containers-trade-action.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.e-pager .e-currentitem, .e-pager .e-currentitem:hover {
+    background: #0BAED4 !important;
+    color: #fff;
+    opacity: 1;
+}
+.e-pager .e-numericitem{
+    border:0px !important;
+}
+#orgLogo{
+    height:50px; 
+}
+.reset {
+    all: revert;
+}
+fieldset {
+    border-color: #E7ECF1 !important;
+}
+.cust-btn {
+    background: #0baed4 !important;
+}
+
+    .cust-btn:hover {
+        background: #1590ad !important;
+    }

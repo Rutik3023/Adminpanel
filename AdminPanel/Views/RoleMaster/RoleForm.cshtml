@@ -1,0 +1,304 @@
+﻿@model  AdminPanel.Models.VMRoleMaser
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "RoleForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* <script src="~/js/ej2_25_1_35.min.js"></script> *@
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                ROLE MASTER
+            </h4>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card rounded shadow-sm">
+                <div class="card-body">
+
+                    <form asp-action="RoleForm" id="myform">
+                        <div class="row">
+
+
+                            <div class="col" style="display:none">
+                                <ejs-textbox floatLabelType=Auto id="RoleId" type="hidden" placeholder="Organization Id " ejs-for="@Model.Code"></ejs-textbox>
+
+                            </div>
+
+                            <div class="col">
+                                <ejs-textbox floatLabelType="Always" cssClass="e-outline e-small" id="RoleName" name="RoleName" placeholder="Role Name *" maxlength="50" ejs-for="@Model.RoleName"></ejs-textbox>
+                                @* <span asp-validation-for="RoleName" class="text-danger"></span> *@
+                            </div>
+
+                            <div class="col">
+                                <ejs-dropdownlist id="OrgCode" floatLabelType="Always" cssClass="e-outline e-small" placeholder="Organization *" filterBarPlaceholder="Search" allowFiltering="true" filtering="onfilterings" ejs-for="@Model.OrgCode" dataSource="@ViewBag.Organization" allowFiltering="true">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                                @* span asp-validation-for="OrgCode" class="text-danger"></span> *@
+                            </div>
+
+
+                            <div class="col">
+
+
+                                <ejs-dropdownlist id="Status" floatLabelType="Always" cssClass="e-outline e-small" placeholder="Status *" filterBarPlaceholder="Search" ejs-for="@Model.Status" dataSource="@ViewBag.Status">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+
+                            </div>
+                            <div class="col">
+                                <ejs-textarea floatLabelType="Always" cssClass="e-outline e-small" id="RoleDescription" placeholder="Description " rows="1" maxlength="500" ejs-for="@Model.RoleDescription"></ejs-textarea>
+
+                            </div>
+
+                            <div class="col">
+                                <ejs-checkbox id="isChecker" floatLabelType="Always" name="isChecker" cssClass="e-outline e-small" label="isChecker" ejs-for="@Model.isChecker"></ejs-checkbox>
+                            </div>
+
+
+
+                            <div class="col-12 mt-1 p-2 text-end">
+
+                                <ejs-button typeof="submit" cssClass="text-light cust-btn t-center" id="save" content="Submit" cssClass="e-btn bg-success text-light"></ejs-button>
+                                <a asp-action="RoleList" Class=" e-btn bg-light text-dark">Back</a>
+                            </div>
+
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+
+
+
+    $(document).ready(function () {
+
+        var optionsa = {
+            rules: {
+                'RoleName': { required: [true, "Please enter RoleName"], regex: [/^[A-Za-z ]+$/, "Special characters are not allowed in Role Name"] },
+                'OrgCode': { required: [true, "Please enter OrgCode"] },
+                'Status': { required: [true, "Please Select Status"] },
+
+            }
+        };
+
+        console.log(optionsa)
+
+        // console.log("Before Rules:" + optionsa)
+        var formObject = new ej.inputs.FormValidator('#myform');
+        formObject.rules = optionsa.rules,
+            formObject.customPlacement = function (inputElement, errorElement) {
+                if (inputElement.parentElement && inputElement.parentElement.parentElement) {
+                    inputElement.parentElement.parentElement.appendChild(errorElement);
+                }
+            }
+
+
+        console.log(optionsa)
+
+        var saveButton = document.getElementById('save');
+        saveButton.addEventListener('click', function (event) {
+
+            console.log("Before Rules:" + optionsa)
+
+
+            var IsValid = formObject.validate();
+            if (IsValid) {
+
+
+            } else {
+
+                event.preventDefault();
+
+                console.log(optionsa)
+            }
+
+        });
+    });
+
+
+
+
+    function onfilterings(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.Organization)), query);
+    }
+
+    //     function onfilterinOrg(e) {
+    //         var query = new ej.data.Query();
+    // query = (e.text !== '') ? query.where('Name', 'contains', e.text, true) : query;
+    //     e.updateData(@Html.Raw(JsonConvert.SerializeObject(ViewBag.Organization)), query);
+    //     }
+
+    // function onfilteringOrganization(e) {
+    //     var query = new ej.data.Query();
+    //     query = (e.text !== '') ? query.where('text', 'startswith', e.text, true) : query;
+    //     e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.Organization)), query);
+    // }
+
+</script>
+@* <script>
+
+    var optionsa = {
+        rules: {
+            'RoleName': { required: [true, "Please enter RoleName"] },
+            'OrgCode': { required: [true, "Please enter OrgCode"] }
+
+        }
+    };
+
+    $(document).ready(function () {
+        var saveButton = document.getElementById('save');
+
+        // Add event listener for click event
+        saveButton.addEventListener('click', function (event) {
+            // alert("kkkk")
+
+
+            console.log(optionsa);
+
+             GetData(optionsa);
+
+            // Call your function when the button is clicked
+           // AddUser(event, optionsa);
+        });
+    });
+
+    // document.addEventListener("DOMContentLoaded", function () {
+
+
+
+    //     // Get reference to the Syncfusion button element
+    //     var saveButton = document.getElementById('save');
+
+    //     // Add event listener for click event
+    //     saveButton.addEventListener('click', function (event) {
+    //        // alert("kkkk")
+
+
+    //         console.log(optionsa);
+
+    //        // GetData(optionsa);
+
+    //         // Call your function when the button is clicked
+    //       AddUser(event,optionsa);
+    //     });
+    // });
+
+    function GetData(optionsa) {
+        console.log(optionsa);
+        event.preventDefault();
+         var formObject = new ej.inputs.FormValidator('#myform');
+        formObject.rules = optionsa;
+        console.log(formObject.rules);
+        // //formObject.addRules('RoleNameId': { required: [true, "Please enter RoleName"] });
+        // // Places error label outside the TextBox using the customPlacement event of FormValidator
+        // formObject.customPlacement = function (element, errorElement) {
+        //     if (element.parentElement && element.parentElement.parentElement) {
+        //         element.parentElement.parentElement.appendChild(errorElement);
+        //     }
+        // };
+
+         var IsValid = formObject.validate();
+        console.log("hhhhhhh"+IsValid);
+        // if (IsValid) {
+        //     alert("is valid");
+
+        // } else {
+
+        //     event.preventDefault();
+        //     alert("not valid")
+        // }
+    }
+
+
+    // Function to be called when the button is clicked
+    function AddUser(event,options) {
+
+        // Your logic here
+        alert("AddUser function called!");
+        console.log(options);
+          // Defines FormValidator to validate the TextBox
+            var formObject = new ej.inputs.FormValidator('#form-element');
+        formObject.rules = optionsa;
+        console.log(formObject.rules);
+            //formObject.addRules('RoleNameId': { required: [true, "Please enter RoleName"] });
+            // Places error label outside the TextBox using the customPlacement event of FormValidator
+            formObject.customPlacement = function (element, errorElement) {
+            if (element.parentElement && element.parentElement.parentElement) {
+                element.parentElement.parentElement.appendChild(errorElement);
+            }
+        };
+
+            var IsValid=formObject.validate();
+            if(IsValid)
+            {
+                alert("is valid");
+
+            }else{
+
+                 event.preventDefault();
+                alert("not valid")
+            }
+
+        // Perform any other actions you need
+    }
+</script>
+
+ *@
+
+@*
+             // document.addEventListener("DOMContentLoaded", function () {
+    //     // var saveButton = document.getElementById('save');
+    //     // saveButton.addEventListener('click', function (event) {
+    //     //     // event.preventDefault();
+    //     //     console.log("optionsa in click event:", optionsa);
+    //     //     GetData(optionsa);
+    //     // });
+    // });
+
+    // function GetData(optionsa) {
+    //     console.log("optionsa in GetData:", optionsa);
+    //     var formObject = new ej.inputs.FormValidator('#myform');
+    //     formObject.rules = optionsa;
+    //     event.preventDefault();
+    //     console.log("FormValidator created with optionsa:", formObject.rules);
+    //     formObject.customPlacement = function (element, errorElement) {
+    //             if (element.parentElement && element.parentElement.parentElement) {
+    //                 element.parentElement.parentElement.appendChild(errorElement);
+    //             }
+    //         };
+
+    //         var IsValid = formObject.validate();
+    //         if (IsValid) {
+    //             alert("is valid");
+
+    //         } else {
+
+    //             event.preventDefault();
+    //             alert("not valid")
+    //         }
+
+    //     // Add further logic here if needed
+    // } *@
+
+

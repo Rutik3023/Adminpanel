@@ -1,0 +1,142 @@
+﻿@model AdminPanel.Models.Employee
+@using Newtonsoft.Json
+
+
+
+@{
+    var gender = new string[] { "Male", "Female", "Other" };
+
+    var martial = new string[] { "Single", "Married", "Widowed", "Divorced" };
+
+
+
+}
+
+<div class="container-fluid">
+    <form id="Personal_Form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+
+
+            <div class="card rounded">
+                <div class="card-body">
+                    <div class="row ">
+
+
+
+                        <div class=" col-4">
+                            <ejs-datepicker id="Date_Of_Birth" placeholder="Date Of Birth*" format="dd-MM-yyyy" floatLabelType=Auto ejs-for="@Model.Date_Of_Birth"></ejs-datepicker>
+                            <span asp-validation-for="Date_Of_Birth" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textbox id="Aadhar_No" placeholder="Aadhar No*" floatLabelType=Auto ejs-for="@Model.Aadhar_No"></ejs-textbox>
+                            <span asp-validation-for="Aadhar_No" maxlength="12" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textbox id="PAN_No" placeholder="PAN No*" floatLabelType=Auto ejs-for="@Model.PAN_No"></ejs-textbox>
+                            <span asp-validation-for="PAN_No" maxlength="10" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-dropdownlist id="Gender" floatLabelType=Auto placeholder="Gender" filterBarPlaceholder="Search" ejs-for="@Model.Gender" dataSource="gender" >
+                                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                            </ejs-dropdownlist>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textbox id="UAN_No" maxlength="50" placeholder="UAN No" floatLabelType=Auto ejs-for="@Model.UAN_No"></ejs-textbox>
+                            <span asp-validation-for="UAN_No" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-dropdownlist id="Nationality" floatLabelType=Auto placeholder="Nationality*" filterBarPlaceholder="Search" ejs-for="@Model.Nationality" filtering="onfilteringN" dataSource="@ViewBag.NationalityDrop" allowFiltering="true">
+                                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                            </ejs-dropdownlist>
+                            <span asp-validation-for="Nationality" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textbox id="Religion" maxlength="50" placeholder="Religion" floatLabelType=Auto ejs-for="@Model.Religion"></ejs-textbox>
+                            <span asp-validation-for="Religion" class="text-danger"></span>
+                        </div>
+
+                        <div class=" col-4">
+                            <ejs-dropdownlist id="Marital_Status" floatLabelType=Auto placeholder="Marital Status" filterBarPlaceholder="Search" ejs-for="@Model.Marital_Status" dataSource="martial">
+                                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                            </ejs-dropdownlist>
+                            <span asp-validation-for="Marital_Status" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-datepicker id="Wedding_Annive" floatLabelType=Auto format="dd-MM-yyyy" placeholder="Wedding Anniversary" ejs-for="@Model.Wedding_Annive"></ejs-datepicker>
+                            <span asp-validation-for="Wedding_Annive" class="text-danger"></span>
+                        </div>
+
+                        <div class=" col-4">
+                            <ejs-textbox id="Office_Phone_No" maxlength="15" floatLabelType=Auto placeholder="Office Phone No" ejs-for="@Model.Office_Phone_No"></ejs-textbox>
+                            <span asp-validation-for="Office_Phone_No" class="text-danger"></span>
+                        </div>
+
+
+                        <div class=" col-4">
+                            <ejs-textbox id="Personal_Email_ID" maxlength="100" floatLabelType=Auto placeholder="Personal Email ID*" ejs-for="@Model.Personal_Email_ID"></ejs-textbox>
+                            <span asp-validation-for="Personal_Email_ID" class="text-danger"></span>
+                        </div>
+
+
+                        <div class=" col-4">
+                            <ejs-textbox id="Personal_Mobile_No" showSpinButton="false" maxlength="10" floatLabelType=Auto placeholder="Personal Mobile No*" ejs-for="@Model.Personal_Mobile_No"></ejs-textbox>
+                            <span asp-validation-for="Personal_Mobile_No" class="text-danger"></span>
+                        </div>
+
+                        <div class=" col-4">
+                            <ejs-textbox id="Home_Town" maxlength="50" placeholder="Home Town" floatLabelType=Auto ejs-for="@Model.Home_Town"></ejs-textbox>
+                            <span asp-validation-for="Home_Town" class="text-danger"></span>
+                        </div>
+
+                        <div class=" col-4">
+                            <ejs-textbox id="Airport_Name" maxlength="100" placeholder="Airport Name" floatLabelType=Auto ejs-for="@Model.Airport_Name"></ejs-textbox>
+                            <span asp-validation-for="Airport_Name" class="text-danger"></span>
+                        </div>
+
+                        <div class=" col-4">
+                            <ejs-textarea id="Personal_Address" maxlength="500" placeholder="Personal Address*" floatLabelType=Auto rows="1" ejs-for="@Model.Personal_Address"></ejs-textarea>
+                            <span asp-validation-for="Personal_Address" class="text-danger"></span>
+                        </div>
+
+                        <div class=" col-4">
+                            <ejs-textbox id="Phone_Number" showSpinButton="false" maxlength="30" placeholder="Phone Number" floatLabelType=Auto ejs-for="@Model.Phone_Number"></ejs-textbox>
+                            <span asp-validation-for="Phone_Number" class="text-danger"></span>
+                        </div>
+
+                       
+                        <div class=" col-4">
+                            <ejs-textbox id="Emergency_Contact_Person" maxlength="100" placeholder="Emergency Contact Person*" floatLabelType=Auto ejs-for="@Model.Emergency_Contact_Person"></ejs-textbox>
+                            <span asp-validation-for="Emergency_Contact_Person" class="text-danger"></span>
+                        </div>
+                       
+                        <div class=" col-4">
+                            <ejs-textbox id="Emergency_Contact_No" showSpinButton="false" maxlength="30" placeholder="Emergency Contact No.*" floatLabelType=Auto ejs-for="@Model.Emergency_Contact_No"></ejs-textbox>
+                            <span asp-validation-for="Emergency_Contact_No" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textarea id="Emergency_Contact_Address" maxlength="500" placeholder="Emergency Contact Address" rows="1" floatLabelType=Auto ejs-for="@Model.Emergency_Contact_Address"></ejs-textarea>
+                            <span asp-validation-for="Emergency_Contact_Address" class="text-danger"></span>
+                        </div>
+                        <div class=" col-4">
+                            <ejs-textarea id="Contact_Address" maxlength="500" placeholder="Contact Address" rows="1" floatLabelType=Auto ejs-for="@Model.Contact_Address"></ejs-textarea>
+                            <span asp-validation-for="Contact_Address" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script>
+
+    function onfilteringN(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.NationalityDrop)), query);
+    }
+
+</script>

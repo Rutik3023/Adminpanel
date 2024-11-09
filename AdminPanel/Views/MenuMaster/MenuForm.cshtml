@@ -1,0 +1,254 @@
+﻿@model  AdminPanel.Models.MenuMaster
+@using Syncfusion.EJ2;
+@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "MenuForm";
+}
+@* <script src="~/js/ej2_25_1_35.min.js"></script> *@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                Menu Master
+            </h4>
+        </div>
+    </div>
+</div>
+<div id="dilog" class="w-25"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card rounded shadow-sm">
+                <div class="card-body">
+                    <form asp-action="MenuForm" enctype="multipart/form-data" id="MyForm" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <ejs-textbox floatLabelType="Always" id="Code" ejs-for="@Model.Code" type="hidden"></ejs-textbox>
+                            </div>
+                            @{
+                                var types = new string[] { "Menu", "Tab" };
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <ejs-dropdownlist id="type" floatLabelType="Always" ejs-for="@Model.Type" cssClass="e-outline e-small" floatLabelType="Always" dataSource="types" popupWidth="300px" placeholder=" type *" popupHeight="220px">
+                                    <e-dropdownlist-fields text="types"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+                            <div class="col">
+                                <ejs-textbox cssClass="e-outline e-small" floatLabelType="Always" placeholder="Name *" id="MenuName" maxlength="50" name="MenuName" ejs-for="@Model.MenuName" type="text"></ejs-textbox>
+                            </div>
+                            <div class="col">
+                                <ejs-numerictextbox floatLabelType="Always" cssClass="e-outline e-small" placeholder="Menu Sr No *" id="MenuSrNo" format="###" min="0" ejs-for="@Model.MenuSrNo"></ejs-numerictextbox>
+                            </div>
+
+                            <div class="col">
+                                <ejs-dropdownlist id="ParentId" cssClass="e-outline e-small" floatLabelType="Always" placeholder="Parent Menu" ejs-for="@Model.ParentId" filterBarPlaceholder="Search" allowFiltering="true" filtering="onfiltering" dataSource="@ViewBag.ParentMenu">
+                                    <e-dropdownlist-fields text="MenuName" value="Code"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+                            <div class="col">
+                                <ejs-dropdownlist id="status" cssClass="e-outline e-small" floatLabelType="Always" placeholder="Status *" ejs-for="@Model.status" filterBarPlaceholder="Search" dataSource="@ViewBag.Status">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+
+                            <div class="col">
+                                <ejs-textbox floatLabelType="Always" cssClass="e-outline e-small" placeholder="Menu Url (area/controller/action) *" maxlength="100" id="MenuUrl" ejs-for="@Model.MenuUrl"></ejs-textbox>
+                            </div>
+
+
+
+
+
+                            <div class="col">
+                                <ejs-textarea cssClass="e-outline e-small" floatLabelType="Always" placeholder="Description *" id="MenuDesc" maxlength="100" rows="3" ejs-for="@Model.MenuDesc"></ejs-textarea>
+                            </div>
+                            <div class="col">
+                                <label for="Logo" class="w-50 text-secondary" style="font-size:13px">Add Menu Icon</label>
+                                <ejs-uploader id="MenuIcon" cssClass="e-outline e-small" allowedExtensions=".jpg, .jpeg, .png" multiple="false" name="MenuIcon" typeof="jpg" async-settings="@{
+                    new Syncfusion.EJ2.Inputs.UploaderAsyncSettings { SaveUrl = "Admin/MenuMaster/MenuForm", RemoveUrl = "" };
+                }" style="flex: 1;">
+                                </ejs-uploader>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section ControlsSection {
+    <div class="control-section mt-2">
+        <ejs-grid id="Grid" dataSource="ViewBag.o" allowSorting="true">
+            <e-grid-selectionSettings persistSelection="true"></e-grid-selectionSettings>
+            <e-grid-editSettings allowDeleting="true"></e-grid-editSettings>
+            <e-grid-pagesettings pageCount="2"></e-grid-pagesettings>
+            <e-grid-columns>
+                <e-grid-column field="Org_Code" headerText="organization Code" isPrimaryKey="true" width="120" visible="false"></e-grid-column>
+                <e-grid-column field="Organization_Name" headerText="ORG Name" width="180"></e-grid-column>
+                <e-grid-column field="Assigned" type="checkbox" id="isAssign" headerText="isAssign" width="50"></e-grid-column>
+            </e-grid-columns>
+        </ejs-grid>
+    </div>
+
+    <div class="form-group col-12 m-1 text-end">
+        <input type="button" class="e-btn cust-btn text-light" id="SubmitBtn" value="Submit"></input>
+        <a asp-action="MenuList" Class="e-btn bg-light text-dark">Back</a>
+    </div>
+
+
+
+
+}
+<style>
+    .e-outline.e-float-input.e-control-wrapper {
+        margin-top: 5% !important;
+
+</style>
+
+@* <div>
+    <a asp-action="MenuList">Back to List</a>
+</div> *@
+<script>
+
+
+    function onfiltering(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('MenuName', 'startswith', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.ParentMenu)), query);
+    }
+
+
+    var dialog = new ej.popups.Dialog({
+        header: 'Warning',
+        content: '<div>Please select Organization</div>',
+        buttons: [
+            { buttonModel: { content: 'Ok', isPrimary: true }, click: clearDialogDiv, id: 'confirmDelete' },
+
+        ]
+
+    });
+
+
+
+
+    function clearDialogDiv() {
+        var dialogDiv = document.getElementById("dilog");
+        if (dialogDiv) {
+            while (dialogDiv.firstChild) {
+                dialogDiv.removeChild(dialogDiv.firstChild);
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        var optionsa = {
+            rules: {
+                'MenuName': { required: [true, "Please enter menu name"], regex: ['^[A-Za-z ]+$', "Special characters are not allowed in Menu name"] },
+                'MenuDesc': { required: [true, "Please enter menu description"] },
+                // 'ParentId': { required: [true, "Please enter parent menu"] },
+                'MenuUrl': { required: [true, "Please enter menu URL (area/controller/action)"] },
+                'MenuSrNo': { required: [true, "Please enter menu serial No"] },
+                'Type': { required: [true, "Please select type"] },
+                'status': { required: [true, "Please enter Status"] }
+            }
+        };
+
+
+        // Initialize Syncfusion Form Validator
+        var formObject = new ej.inputs.FormValidator('#MyForm');
+        formObject.rules = optionsa.rules,
+            formObject.customPlacement = function (inputElement, errorElement) {
+                if (inputElement.parentElement && inputElement.parentElement.parentElement) {
+                    inputElement.parentElement.parentElement.appendChild(errorElement);
+                }
+            }
+
+        $('#SubmitBtn').on('click', function (event) {
+
+            // Prevent the default form submission
+
+            // Collect form data
+            var formData = new FormData(document.getElementById('MyForm'));
+
+            // Collect selected grid data
+            var grid = document.getElementById('Grid').ej2_instances[0];
+            var selectedRecords = grid.getSelectedRecords();
+
+            // console.log(selectedRecords.length);
+            if (selectedRecords.length > 0) {
+                var selectedORGCodes = selectedRecords.map(record => record.Org_Code);
+                var selectedAssignments = selectedRecords.map(record => record.Assigned);
+                var selectedOrgNames = selectedRecords.map(record => record.Organization_Name);
+                $.each(selectedORGCodes, function (i, value) {
+                    // console.log(i, value);
+                });
+
+
+                // console.log(seleselectedAssignmentsctedORGCodes);
+                //  console.log(selectedOrgNames);
+
+
+                // Append selected grid data to form data
+                formData.append('Org_Code', selectedORGCodes.join(','));
+                formData.append('Assigned', selectedAssignments.join(','));
+                formData.append('Organization_Name', selectedOrgNames.join(','));
+
+                // console.log(formData);
+
+                var IsValid = formObject.validate();
+                // console.log(IsValid);
+                if (IsValid) {
+
+                    $.ajax({
+                        url: 'MenuForm',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            /*  console.log("Response from server:", response); */
+                           /*  // Clear form fields */
+                            $('#MyForm')[0].reset();
+                            /* /* // Clear grid selections */ */
+                            grid.clearSelection();
+
+                           /*  // Redirect to MenuList */
+                            window.location.href = '@Url.Action("MenuList")';
+                            var responseSpan = document.getElementById('responseSpan');
+                            if (responseSpan) {
+                                responseSpan.innerHTML = response;
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error during form submission:", textStatus, errorThrown);
+                        }
+                    });
+                } else {
+                    // alert("not validate")
+                    event.preventDefault();
+                }
+            } else {
+                dialog.appendTo('#dilog');
+                dialog.show();
+
+            }
+
+
+        });
+
+
+    });
+
+</script>
+

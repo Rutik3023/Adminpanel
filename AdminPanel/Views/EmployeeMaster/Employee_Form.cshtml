@@ -1,0 +1,257 @@
+﻿@model AdminPanel.Models.Employee
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "Employee_Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    string o = TempData["Output"] as string;
+    bool showToast = !string.IsNullOrEmpty(o);
+    string toastClass = string.Empty;
+
+    if (showToast)
+    {
+
+        if (o.Contains("Error") || o.Contains("Please try again.") || o.Contains("Co-Email id already"))
+        {
+            toastClass = "bg-danger";
+        }
+        else
+        {
+            toastClass = "bg-success";
+        }
+    }
+}
+
+<style>
+    .bg-success {
+        background-color: #28a745 !important;
+        color: white;
+    }
+
+
+    .bg-danger {
+        background-color: #dc3545 !important;
+        color: white;
+    }
+
+    .green-toast {
+        background-color: #4CAF50 !important; /* Green background */
+        color: white !important; /* White text */
+    }
+
+    .Red-toast {
+        background-color: #f44336 !important; /* Red background */
+        color: white !important; /* White text */
+    }
+
+
+</style>
+
+
+
+@if (showToast)
+{
+    <ejs-toast id="element" cssClass="@toastClass" content="@o"></ejs-toast>
+}
+
+
+<script src="~/js/employeemaster/employee.js"></script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                Employee Master
+            </h4>
+        </div>
+    </div>
+</div>
+<div id="DilogEmpMandate" class="w-25"></div>
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-12">
+            <div class="card rounded shadow-sm">
+                <div class="card-body">
+
+                    <form asp-action="Employee_Form" id="EmpForm" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div style="display:none">
+                            <ejs-textbox name="Sys_Code" id="Sys_Code" floatLabelType=Auto placeholder="Code" ejs-for="@Model.Sys_Code"></ejs-textbox>
+                        </div>
+                        <div class="row">
+
+                           
+                            <div class="col-4">
+                                <ejs-dropdownlist id="OrgCode" floatLabelType="Auto" placeholder="Organization" ejs-for="@Model.OrgCode" filterBarPlaceholder="Search" allowFiltering="true" filtering="onfiltering" dataSource="@ViewBag.ORG">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+                            <div class="col-4">
+                                <ejs-textbox name="First_Name" maxlength="30" id="First_Name" floatLabelType=Auto placeholder="First Name *" ejs-for="@Model.First_Name"></ejs-textbox>
+                            </div>
+                            <div class="col-4">
+                                <ejs-textbox name="Middle_Name" id="Middle_Name" maxlength="30" floatLabelType=Auto placeholder="Middle Name *" ejs-for="@Model.Middle_Name"></ejs-textbox>
+                            </div>
+
+                            <div class="col-4">
+                                <ejs-textbox name="Last_Name" id="Last_Name" maxlength="40" floatLabelType=Auto placeholder="Last Name *" ejs-for="@Model.Last_Name" change="OnLastName"></ejs-textbox>
+                            </div>
+
+
+
+
+
+
+                        
+
+                        
+
+                            <div class="col-4">
+                                <ejs-textbox id="Alice_Name" floatLabelType=Auto placeholder="Alice Name" ejs-for="@Model.Alice_Name"></ejs-textbox>
+                            </div>
+                            <div class="col-4">
+                                <ejs-dropdownlist id="Emp_Status" floatLabelType=Auto placeholder="Employment Status *" filterBarPlaceholder="Search" ejs-for="@Model.Emp_Status" dataSource="@ViewBag.EmpStatus">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+
+
+                            <div class="col-4">
+                                <ejs-textbox id="Co_Email_ID" maxlength="100" floatLabelType=Auto placeholder="Co-Email ID *" ejs-for="@Model.Co_Email_ID"></ejs-textbox>
+                            </div>
+
+                            <div class="col-4">
+                                <ejs-textbox id="Mobile_No" maxlength="10" floatLabelType=Auto placeholder="Mobile No *" ejs-for="@Model.Mobile_No"></ejs-textbox>
+                            </div>
+                           
+
+                       
+
+                        
+                            <div class="col-4">
+                                <ejs-textbox id="Reason_for_Resignation" maxlength="50" floatLabelType=Auto placeholder="Reason for Resignation  " ejs-for="@Model.Reason_for_Resignation"></ejs-textbox>
+                            </div>
+                            <div class="col-4">
+                                <ejs-dropdownlist id="Salesmen" floatLabelType=Auto placeholder=" Is Salesmen *" filterBarPlaceholder="Search" ejs-for="@Model.Salesmen" dataSource="@ViewBag.YesNoDropDown">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+
+                            <div class="col-4">
+                                <ejs-dropdownlist id="Status" floatLabelType=Auto placeholder="Status *" filterBarPlaceholder="Search" ejs-for="@Model.Status" dataSource="@ViewBag.Status">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+                           
+                            <div class="col-4" id="BrowseImg">
+                                <label for="Document_" class="w-100 text-secondary mt-2" style="font-size:13px">Add Employee Photo *</label>
+                                <ejs-uploader id="Emp_photoCode" maxFileSize=3145728 name="Emp_photoCode" placeholder=" Employee Photo *" selected="onSelect" allowedExtensions=".jpg,.jpeg,.png" multiple="false"></ejs-uploader>
+                              
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-12 border ms-2 mt-2 p-0" id="UploadImgContainer" style="height:130px; width:130px">
+                                @if (ViewBag.EmpPhoto != null)
+                                {
+                                    <img id="UploadImg" alt="Uploaded Image" style="display: block; width: 100%; height: 100%;" src="@ViewBag.EmpPhoto">
+                                }
+                                else
+                                {
+                                    <img id="UploadImg" alt="Uploaded Image" style="display: none; width: 100%; height: 100%;">
+                                }
+                                <div id="m1">
+                                </div>
+                            </div>
+                           
+                        </div>
+
+
+
+                        <div class="form-group p-3 mt-1 me-3 text-end">
+                            <ejs-button id="EmpsubmitBtn" content="Submit" cssClass="e-btn cust-btn text-light"></ejs-button>
+                            @* <ejs-button id="BackBtn" content="Back"  cssClass="bg-light text-dark "></ejs-button> *@
+
+                            <a asp-action="Employee_List" Class="e-btn bg-light text-dark">Back</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="mainContainer" class="container-fluid mt-2">
+    <div id="ej2TabContainer">
+        <div id="ej2Tab">
+            <div class="e-tab-header">
+                <div>Professional</div>
+                <div>Personal</div>
+                <div>Account</div>
+                <div>Documents</div>
+                <div>Access Details</div>
+                <div>Entitlement Details</div>
+                <div>Family Details</div>
+                <div>Beneficiary Details</div>
+            </div>
+            <div class="e-content">
+                <div>
+                    @await Html.PartialAsync("Employee_Professional")
+                </div>
+                <div>
+                    @await Html.PartialAsync("Employee_Personal")
+                </div>
+                <div>
+                    @await Html.PartialAsync("Employee_Accounts")
+                </div>
+                <div>
+                    @await Html.PartialAsync("Employee_Documents")
+                </div>
+                <div></div>
+                <div></div>
+                <div>
+                    @await Html.PartialAsync("Employee_Family_Details")
+
+                </div>
+                <div></div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div id="Dilogbox"></div>
+    <div id="toast"></div>
+
+    <!-- Add the button outside the tab fields -->
+    <div class="text-end me-5 ">
+        <ejs-button type="button" cssClass="e-btn bg-success text-light" id="TabsSubmitBtn" content="Save"></ejs-button>
+
+        <!-- <a asp-action="OrganizationList" class="e-btn bg-light text-dark">Back</a> -->
+    </div>
+</div>
+
+<script>
+    
+    function onfiltering(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Text', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(@ViewBag.ORG)), query);
+    }
+
+    //For Toaster---
+    document.addEventListener('DOMContentLoaded', function () {
+        var showToast = @showToast.ToString().ToLower();
+
+        if (showToast) {
+            var toastObj = document.getElementById('element').ej2_instances[0];
+
+            // Set the toaster position to top-right
+            toastObj.position = {
+                X: 'Right',
+                Y: 'Top'
+            };
+
+            toastObj.show();
+        }
+    });
+</script>

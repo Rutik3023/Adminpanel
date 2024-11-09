@@ -1,0 +1,445 @@
+﻿@model  AdminPanel.Models.Org_Saas_License
+@using Syncfusion.EJ2
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@addTagHelper *, Syncfusion.EJ2
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+
+    List<object> GridCommands = new List<object>();
+
+    GridCommands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit btnEdit", cssClass = "e-flat" } });
+
+    GridCommands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete btnDelete", cssClass = "e-flat" } });
+
+    var resp = ViewBag.AuthKeyisEmpty;
+
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                Organization/Saas License
+            </h4>
+        </div>
+    </div>
+</div>
+
+<div id="AuthKeyDialog" class="w-25"></div>
+<div id="DeleteAuthKeyDialog" class="w-25"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card rounded shadow-sm">
+                <div class="card-body">
+                    <form asp-action="DemoSidebar" id="SaasOrgForm">
+                        <div class="row">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <!-- Sys_Code field (hidden) -->
+                            <div class="col-lg-3 col-md-6 col-sm-12" style="display:none">
+                                <ejs-textbox id="Sys_Code" placeholder="Id" ejs-for="@Model.Sys_Code"></ejs-textbox>
+                            </div>
+
+                            <!-- Status field -->
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <ejs-dropdownlist id="OrgCode" floatLabelType="Auto" placeholder="Org/Saas No. *" filterBarPlaceholder="Search" ejs-for="@Model.OrgCode" dataSource="@ViewBag.AllOrg" allowFiltering="true">
+                                    <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                            </div>
+
+                            <div class="col-4">
+                                <ejs-datepicker id="Valid_From" placeholder="Valid From*" format="dd-MM-yyyy" ejs-for="@Model.Valid_From" floatLabelType=Auto></ejs-datepicker>
+                            </div>
+
+                            <div class="col-4">
+                                <ejs-datepicker id="Valid_Till" placeholder="Valid Till*" format="dd-MM-yyyy" ejs-for="@Model.Valid_Till" floatLabelType=Auto></ejs-datepicker>
+                            </div>
+
+                            <div class="col-4" style="display:none">
+                                <ejs-textbox id="AuthKey" readonly floatLabelType=Auto></ejs-textbox>
+                            </div>
+
+                            <!-- Generate Authentication key field -->
+                            <div class="col-12 mt-1 p-2 text-end">
+                                <div class="d-flex align-items-center">
+                                    <ejs-checkbox id="GenerateAuthKeyCheck" label="Generate Authentication key" disabled="true"></ejs-checkbox>
+                                    <button type="button" Class="e-btn text-light bg-success ms-2" id="GenerateAuthKeyBtn">Generate</button>
+                                </div>
+                            </div>
+
+                            <!-- Submit button -->
+                            <div class="col-12 mt-1 p-2 text-end">
+                                <ejs-button cssClass="e-btn bg-success text-light" id="SaasOrgSubmitBtn" content="Submit"></ejs-button>
+                                @* <a asp-action="" Class="e-btn bg-danger text-light">Back</a> *@
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<br />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="p-2 m-0">
+                Organization/Saas License List
+            </h4>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="container-fluid mt-1 ">
+
+
+    <ejs-grid id="Grid" dataSource="@ViewBag.GetSaasOrgAll" allowSorting="true" allowPaging="true" allowResizing="true" allowFiltering="true" allowExcelExport="true" toolbar="@(new List<string>() {"Search" })">
+        <e-grid-editsettings></e-grid-editsettings>
+        <e-grid-filterSettings type="Excel"></e-grid-filterSettings>
+        <e-grid-pageSettings pageSize="5" pageSizes="@(new string[] { "5", "10" ,"12","15","20", "All" })" />
+        <e-grid-columns>
+            <e-grid-column headerText="Option" width="105" commands="GridCommands"></e-grid-column>
+
+            <e-grid-column field="Sys_Code" visible="false" isPrimaryKey="true" headerText="Id" textAlign="Right" width="105"></e-grid-column>
+
+            <e-grid-column field="OrgCode" isPrimaryKey="true" headerText="Org/Saas No." textAlign="Right" width="105"></e-grid-column>
+
+            <e-grid-column field="Valid_From" isPrimaryKey="true" format="dd-mm-yyyy" headerText="Valid From" textAlign="Right" width="105"></e-grid-column>
+
+
+            <e-grid-column field="Valid_Till" isPrimaryKey="true" headerText="Valid Till" textAlign="Right" width="105"></e-grid-column>
+
+            <e-grid-column field="Sys_Created_On" width="200" headerText="CreatedOn" allowFiltering="false"></e-grid-column>
+
+            <e-grid-column field="Sys_Created_By" width="130" headerText="Created By" allowFiltering="false"></e-grid-column>
+
+        </e-grid-columns>
+    </ejs-grid>
+
+</div>
+
+
+<script>
+
+
+
+    var options = {
+        rules: {
+            'OrgCode': { required: [true, "Please select Org/Saas No."] },
+            'Valid_From': { required: [true, "Please enter valid from"] },
+            'Valid_Till': { required: [true, "Please enter valid till"] }
+
+
+        },
+    };
+
+
+    var dialog = new ej.popups.Dialog({
+        header: '',
+        content: '',
+        buttons: [
+            { buttonModel: { content: 'Cancel', isPrimary: true }, click: onOkButtonClick }
+
+        ]
+
+    });
+
+    @if (!string.IsNullOrEmpty(@resp))
+    {
+        <text>
+            dialog.header= '<div class="text-danger">@Html.Raw("Alert Message")</div>';
+        dialog.content = '<div>@Html.Raw(@resp)</div>';
+        dialog.appendTo('#AuthKeyDialog');
+        dialog.show();
+        </text>
+    }
+
+
+        function onOkButtonClick() {
+
+            dialog.hide();
+            clearDialogDiv();
+        }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get reference to the Syncfusion button element
+        var saveButton = document.getElementById('SaasOrgSubmitBtn');
+
+        // Add event listener for click event
+        saveButton.addEventListener('click', function (event) {
+            // Call your function when the button is clicked
+            AddUser(event);
+        });
+    });
+
+    // Function to be called when the button is clicked
+    function AddUser(event) {
+
+        // Your logic here
+
+        // Defines FormValidator to validate the TextBox
+        var formObject = new ej.inputs.FormValidator('#SaasOrgForm', options);
+
+        // Places error label outside the TextBox using the customPlacement event of FormValidator
+        formObject.customPlacement = function (element, errorElement) {
+            element.parentElement.parentElement.appendChild(errorElement);
+        };
+
+        var IsValid = formObject.validate();
+        if (IsValid = false) {
+            event.preventDefault();
+
+        }
+
+
+
+        // Perform any other actions you need
+    }
+
+
+
+
+
+
+
+
+    var saveButton = document.getElementById('GenerateAuthKeyBtn');
+
+    // Add event listener for click event
+    saveButton.addEventListener('click', function (event) {
+        // Call your function when the button is clicked
+
+
+
+
+
+        var formObject = new ej.inputs.FormValidator('#SaasOrgForm', options);
+
+        // Places error label outside the TextBox using the customPlacement event of FormValidator
+        formObject.customPlacement = function (element, errorElement) {
+            element.parentElement.parentElement.appendChild(errorElement);
+        };
+
+        formObject.customPlacement = function (element, errorElement) {
+            element.parentElement.parentElement.appendChild(errorElement);
+        };
+
+        var IsValid = formObject.validate();
+
+
+        if (IsValid == false) {
+
+            event.preventDefault();
+
+        }
+        else {
+
+
+
+            var checkbox = document.getElementById('GenerateAuthKeyCheck').ej2_instances[0];
+            checkbox.checked = true;
+
+            var authtoken = document.getElementById('AuthKey').ej2_instances[0];
+
+
+            var valid_from = document.getElementById('Valid_From').ej2_instances[0].value;
+            var valid_till = document.getElementById('Valid_Till').ej2_instances[0].value;
+
+
+            FormData = {
+
+                Valid_From: valid_from,
+                Valid_Till: valid_till
+
+
+            }
+
+            console.log(FormData);
+
+            $.ajax({
+                url: '/Admin/DynamicSidebar/generateKey', // Replace with your action and controller
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(FormData),
+                success: function (response) {
+
+                    if (response != null) {
+
+
+                        console.log(response);
+
+                        authtoken.value = response;
+
+
+
+                    }
+
+
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.error(xhr.responseText);
+                }
+            });
+
+
+        }
+
+
+
+
+
+
+    });
+
+
+    // Handle Edit and Delete
+    function handleEditCommand(rowData) {
+
+        // Example: Implement logic to handle edit command
+        var grid = document.getElementById("Grid").ej2_instances[0];
+        var data = grid.getRowObjectFromUID(rowData).data;
+        console.log("Edit command clicked", data.Sys_Code);
+        var EditId = data.Sys_Code;
+        if (EditId > 0) {
+            window.location.href = '@Url.Action("DemoSidebar", "DynamicSidebar")' + '?sysCode=' + EditId;
+        }
+
+
+
+    }
+
+    //delete Functionality sss---------------------------------
+
+    var dialog2 = new ej.popups.Dialog({
+        header: 'Confirm Delete',
+        content: '<div>Are you sure you want to delete this record?</div>',
+        buttons: [
+            { buttonModel: { content: 'Yes', isPrimary: true }, click: onYesButtonClick, id: 'confirmDelete' },
+            { buttonModel: { content: 'No' }, click: onNoButtonClick, id: 'cancelDelete' }
+        ]
+
+    });
+
+
+
+
+    function clearDialogDiv() {
+        var dialogDiv = document.getElementById("DeleteAuthKeyDialog");
+        if (dialogDiv) {
+            while (dialogDiv.firstChild) {
+                dialogDiv.removeChild(dialogDiv.firstChild);
+            }
+        }
+    }
+
+
+    function onNoButtonClick() {
+        dialog2.hide()
+        clearDialogDiv();
+        var popup = document.getElementById('DeleteAuthKeyDialog');
+        console.log(popup);
+        var popupElement = popup.querySelector('w-25.e-control.e-popup.e-popup-.e-dialog');
+        console.log(popupElement);
+        if (popupElement) {
+
+            popup.removeChild(popupElement);
+        }
+    }
+
+    function onYesButtonClick() {
+
+        clearDialogDiv();
+        console.log("Yes button clicked", id)
+
+        if (id > 0) {
+            $.ajax({
+                "url": '@Url.Action("DeleteOrganizationLicense", "DynamicSidebar")',
+                method: "GET",
+                data: { sysCode: id },
+                dataType: 'json',
+                success: function (data) {
+
+                    var grid = document.getElementById('Grid').ej2_instances[0];
+
+
+                    window.location.reload();
+
+                    // console.log(grid);
+                    // grid.datasource = data;
+                    // grid.refresh();
+                },
+                error: function (err) {
+                    console.log("error: " + err)
+                }
+
+            })
+
+
+
+        }
+
+    }
+
+
+
+
+    function handleDeleteCommand(rowData) {
+        clearDialogDiv();
+        var grid = document.getElementById("Grid").ej2_instances[0];
+        dialog.appendTo('#AuthKeyDialog');
+
+        var data = grid.getRowObjectFromUID(rowData).data;
+        console.log("Delete command clicked", data.Sys_Code);
+        id = data.Sys_Code;
+        console.log(id);
+        if (dialog) {
+            dialog.show(); // Show the dialog
+        }
+
+    }
+
+
+    //Event when user Click On Edit or Delete Option Starts
+    document.body.addEventListener("click", function (event) {
+        var target = event.target;
+        if (target.classList.contains("e-editbutton") || target.classList.contains("btnEdit")) {
+
+            var rowData = target.closest("tr").getAttribute("data-uid");
+            console.log(rowData);
+
+            handleEditCommand(rowData);
+        } else if (target.classList.contains("e-deletebutton") || target.classList.contains("btnDelete")) {
+
+            var rowData = target.closest("tr").getAttribute("data-uid");
+            handleDeleteCommand(rowData);
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+</script>

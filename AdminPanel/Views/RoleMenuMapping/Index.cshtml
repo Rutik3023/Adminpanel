@@ -1,0 +1,105 @@
+﻿{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+</style>
+<template>
+    <input class="Verified" type="checkbox" />
+</template>
+<ejs-grid id="gridIndex_Section"
+          gridLines="Both"
+          queryCellInfo="queryCellInfo"
+          height="100%"
+          allowTextWrap="false"
+          allowSorting="true"
+          allowGrouping="true"
+          allowSelection="true"
+          allowExcelExport="true"
+          allowPdfExport="true"
+          allowFiltering="true"
+          allowResizing="true"
+          allowPaging="true"
+          enableInfiniteScrolling="true"
+          allowMultiSorting="true"
+          EnableStickyHeader=true
+          showColumnMenu=true
+          enableHover=false
+          clipMode="EllipsisWithTooltip"
+          autoFit=true
+          dataSource="ViewBag.dataSource"
+          allowMultiSorting=true>
+
+    <e-grid-editSettings mode=Normal
+                         allowAdding="true"
+                         allowDeleting="true"
+                         allowEditing="true"
+                         newRowPosition="Top"
+                         showAddNewRow="false"
+                         showDeleteConfirmDialog=true
+                         showConfirmDialog=true></e-grid-editSettings>
+
+    <e-grid-filterSettings type="Excel"></e-grid-filterSettings>
+
+    <e-grid-textwrapsettings wrapMode="Content"></e-grid-textwrapsettings>
+
+    <e-grid-selectionSettings mode="Row"
+                              type="Multiple"
+                              checkboxOnly=false
+                              CheckboxMode=ResetOnRowClick></e-grid-selectionSettings>
+    <e-data-manager url="/Home/GridDataOperationHandler" crudUrl="/Home/GridCrudPostHandler" adaptor="UrlAdaptor"></e-data-manager>
+    <e-grid-editSettings allowAdding="true" allowEditing="true"></e-grid-editSettings>
+    <e-grid-columns>
+        <e-grid-column type="CheckBox" width="50"></e-grid-column>
+        <e-grid-column field="OrderID" headerText="Order ID" isPrimaryKey="true" textAlign="Right" width="auto"></e-grid-column>
+        <e-grid-column field="CustomerID" headerText="Customer ID" type="string" width="auto" editType="dropdownedit" validationRules="(new { required=true, min=0})"></e-grid-column>
+        <e-grid-column field="Freight" headerText="Freight" textAlign="Right" format="C2" width="auto" editType="dropdownedit" validationRules="(new { required=true, min=0})"></e-grid-column>
+        <e-grid-column field="ShipCountry" headerText="Ship Country" width="auto" editType="dropdownedit" validationRules="(new { required=true, min=0})"></e-grid-column>
+        <e-grid-column headerTextAlign="Center" textAlign="Center" width="auto" minwidth="50"
+                       field="Verified" headerText="Verified"
+                       type="boolean" editType="booleanedit" template="#templateSection_Checkbox"></e-grid-column>
+        <e-grid-column headerTextAlign="Center" textAlign="Center" width="auto" minwidth="50"
+                       field="Verified" headerText="Verified" editType="booleanedit" type="boolean" displayAsCheckbox="true"></e-grid-column>
+        <e-grid-column headerTextAlign="Center" textAlign="Center" width="auto" minwidth="50" field="DummyBoolean"
+                       headerText="DummyBoolean" editType="booleanedit" type="boolean" displayAsCheckbox="true"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+<script type="text/x-jsrender" id="templateSection_Checkbox">
+    <input type="checkbox"/>
+    @*${if (Verified)}
+
+            <input id="Verified" type="checkbox" name="Verified" onchange="updateCheckboxOnSingleClick(event,false)" checked="checked" />
+
+        ${else}
+
+            <input id="Verified" type="checkbox" name="Verified" onchange="updateCheckboxOnSingleClick(event,true)">
+
+        ${/if} *@
+</script>
+
+<script>
+    function queryCellInfo(args) {
+        if (args.column.field === 'Verified' && !ej.base.isNullOrUndefined(args.column.template)) {
+            const checkbox = new ej.buttons.CheckBox({
+                checked: args.data.Verified
+            });
+            // checkbox.appendTo(checkboxElement);
+            checkbox.appendTo(args.cell.querySelector('input'));
+        }
+    }
+    function updateCheckboxOnSingleClick(event, value) {
+        var instance = document.getElementById('gridIndex_Section').ej2_instances[0];
+
+        var selectedRecords = instance.getSelectedRecords();
+
+        if (selectedRecords.length > 0) {
+
+            var selectedRow = selectedRecords[0];
+
+            selectedRow.Verified = value;
+
+            instance.updateRow(2, selectedRow)
+
+        }
+
+    }
+</script>
