@@ -29,7 +29,7 @@ namespace AdminPanel.CommonRepo
         {
             try
             {
-                string Con_String = "Data Source=.\\MSSQLSERVER20;Initial Catalog=M_Freight;User ID=Sa;Password=Sql123;Trust Server Certificate=True";
+                string Con_String = _connectionString;//"Data Source=.\\MSSQLSERVER20;Initial Catalog=M_Freight;User ID=Sa;Password=Sql123;Trust Server Certificate=True";
                 DBHelper db = new DBHelper();
                 db.OpenConnection(Con_String);
 
@@ -110,7 +110,8 @@ namespace AdminPanel.CommonRepo
 
             }
             catch (Exception ex)
-            {
+            
+            +{
 
                 return null;
                 throw;

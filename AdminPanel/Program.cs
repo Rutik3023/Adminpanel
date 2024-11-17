@@ -1,8 +1,9 @@
+using AdminPanel.CommonRepo;
 using AdminPanel.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
-
+CommonFunction.Initialize(builder.Configuration);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 var config = new ConfigurationBuilder()

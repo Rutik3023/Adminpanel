@@ -8,6 +8,8 @@ using System.Net.Mail;
 using System.Net;
 using AdminPanel.CommonRepo;
 using  AdminPanel.Models;
+using MimeKit;
+using MimeKit.Text;
 
 
 namespace AdminPanel.Services
@@ -246,27 +248,58 @@ namespace AdminPanel.Services
 
                 // Mail subject and body
                 string subject = "Your Username Retrieval Request";
+                var emailMessage = new MimeMessage();
+                emailMessage.From.Add(new MailboxAddress(SenderName, SenderEmail));
+                emailMessage.To.Add(new MailboxAddress(recipientName, recipientEmail));
+                emailMessage.Subject = subject;
+                //  emailMessage.Body = new TextToHtml("plain") { htm = "Hello, this is a test email sent from a .NET Core application using Gmail SMTP!" };
+                emailMessage.Body = new TextPart("html") { Text = body };
+
 
 
                 // Create and configure the mail message
-                MailMessage message = new MailMessage(new MailAddress(SenderEmail, SenderName), new MailAddress(recipientEmail, recipientName));
-                message.Subject = subject;
-                message.Body = body;
-                message.IsBodyHtml = true;
+                //MailMessage message = new MailMessage(new MailAddress(SenderEmail, SenderName), new MailAddress(recipientEmail, recipientName));
+                //message.Subject = subject;
+                //message.Body = body;
+                //message.IsBodyHtml = true;
 
-                // Create and configure the SMTP client
-                using (SmtpClient client = new SmtpClient(Mailserver, portNumber))
+                //// Create and configure the SMTP client
+                //using (SmtpClient client = new SmtpClient(Mailserver, portNumber))
+                //{
+                //    client.Credentials = new NetworkCredential(User_name, Password);
+                //    client.EnableSsl = true;
+
+                //    // Send the email
+                //    client.Send(message);
+                //    InsertUpdate_USER_PASSWORDCHANGE_LINK(Email);
+
+                //    return true;
+
+
+                //}
+
+
+                using (var client = new MailKit.Net.Smtp.SmtpClient()) // Fully qualified name
                 {
-                    client.Credentials = new NetworkCredential(User_name, Password);
-                    client.EnableSsl = true;
-
-                    // Send the email
-                    client.Send(message);
-
-                    return true;
-
+                    try
+                    {
+                        client.ConnectAsync(Mailserver, portNumber, false);
+                        client.AuthenticateAsync(User_name, Password);
+                        client.SendAsync(emailMessage);
+                        client.DisconnectAsync(true);
+                        return true;
+                        Console.WriteLine("Email sent successfully!");
+                    }
+                    catch (Exception ex)
+                    {
+                        return false;
+                        throw;
+                        Console.WriteLine($"Error sending email: {ex.Message}");
+                    }
 
                 }
+
+
 
             }
             catch (Exception)
@@ -274,6 +307,9 @@ namespace AdminPanel.Services
 
                 return false;
             }
+
+        
+            
         }
         #endregion
 
@@ -320,26 +356,61 @@ namespace AdminPanel.Services
                 string subject = "Password Reset Request";
 
 
+
+
+
+                var emailMessage = new MimeMessage();
+                emailMessage.From.Add(new MailboxAddress(SenderName, SenderEmail));
+                emailMessage.To.Add(new MailboxAddress(recipientName, recipientEmail));
+                emailMessage.Subject = subject;
+              //  emailMessage.Body = new TextToHtml("plain") { htm = "Hello, this is a test email sent from a .NET Core application using Gmail SMTP!" };
+                emailMessage.Body = new TextPart("html") { Text = body };
+
+
+
                 // Create and configure the mail message
-                MailMessage message = new MailMessage(new MailAddress(SenderEmail, SenderName), new MailAddress(recipientEmail, recipientName));
-                message.Subject = subject;
-                message.Body = body;
-                message.IsBodyHtml = true;
+                //MailMessage message = new MailMessage(new MailAddress(SenderEmail, SenderName), new MailAddress(recipientEmail, recipientName));
+                //message.Subject = subject;
+                //message.Body = body;
+                //message.IsBodyHtml = true;
 
-                // Create and configure the SMTP client
-                using (SmtpClient client = new SmtpClient(Mailserver, portNumber))
+                //// Create and configure the SMTP client
+                //using (SmtpClient client = new SmtpClient(Mailserver, portNumber))
+                //{
+                //    client.Credentials = new NetworkCredential(User_name, Password);
+                //    client.EnableSsl = true;
+
+                //    // Send the email
+                //    client.Send(message);
+                //    InsertUpdate_USER_PASSWORDCHANGE_LINK(Email);
+
+                //    return true;
+
+
+                //}
+
+
+                using (var client = new MailKit.Net.Smtp.SmtpClient()) // Fully qualified name
                 {
-                    client.Credentials = new NetworkCredential(User_name, Password);
-                    client.EnableSsl = true;
-
-                    // Send the email
-                    client.Send(message);
-                    InsertUpdate_USER_PASSWORDCHANGE_LINK(Email);
-
-                    return true;
-
+                    try
+                    {
+                         client.ConnectAsync(Mailserver, portNumber, false);
+                         client.AuthenticateAsync(User_name, Password);
+                         client.SendAsync(emailMessage);
+                        client.DisconnectAsync(true);
+                        return true;
+                        Console.WriteLine("Email sent successfully!");
+                    }
+                    catch (Exception ex)
+                    {
+                        return false;
+                        throw;
+                        Console.WriteLine($"Error sending email: {ex.Message}");
+                    }
 
                 }
+
+
 
             }
             catch (Exception)

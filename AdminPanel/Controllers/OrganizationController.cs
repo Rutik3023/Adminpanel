@@ -20,7 +20,7 @@ using System.Net.Http.Headers;
 
 namespace AdminPanel.Controllers
 {
-    [Area("Organization")]
+  
     [Authorize]
     [AuthorizeUser]
     public class OrganizationController : Controller
